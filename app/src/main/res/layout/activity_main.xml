@@ -15,8 +15,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="end"
-            android:orientation="horizontal">
+            android:gravity="end|bottom"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp">
 
             <ImageButton
                 android:id="@+id/btnFavorites"
@@ -24,7 +25,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/star_big_on"
-                android:tint="@android:color/white" />
+                android:tint="#FFFFFF" />
 
             <ImageButton
                 android:id="@+id/btnLogout"
@@ -32,7 +33,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:tint="@android:color/white" />
+                android:tint="#FFFFFF" />
 
         </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.chortas.pixion.R
 import com.chortas.pixion.databinding.ActivityLoginBinding
 import com.chortas.pixion.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -30,7 +31,7 @@ class LoginActivity : AppCompatActivity() {
             if (identifier.isNotEmpty() && password.isNotEmpty()) {
                 loginUser(identifier, password)
             } else {
-                Toast.makeText(this, "Por favor, complete todos los campos", 
+                Toast.makeText(this, getString(R.string.fill_all_fields), 
                     Toast.LENGTH_SHORT).show()
             }
         }
@@ -84,12 +85,12 @@ class LoginActivity : AppCompatActivity() {
                             }
                     }
                 } else {
-                    Toast.makeText(this, "Credenciales inválidas", 
+                    Toast.makeText(this, getString(R.string.invalid_credentials), 
                         Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Error al verificar el nombre de usuario", 
+                Toast.makeText(this, getString(R.string.error_checking_username), 
                     Toast.LENGTH_SHORT).show()
             }
     }

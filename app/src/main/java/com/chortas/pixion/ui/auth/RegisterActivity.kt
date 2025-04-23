@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.chortas.pixion.R
 import com.chortas.pixion.data.model.User
 import com.chortas.pixion.databinding.ActivityRegisterBinding
 import com.chortas.pixion.ui.main.MainActivity
@@ -36,16 +37,16 @@ class RegisterActivity : AppCompatActivity() {
                         if (isAvailable) {
                             registerUser(email, password, username)
                         } else {
-                            Toast.makeText(this, "El nombre de usuario ya está en uso", 
+                            Toast.makeText(this, getString(R.string.username_taken), 
                                 Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
-                    Toast.makeText(this, "Las contraseñas no coinciden", 
+                    Toast.makeText(this, getString(R.string.passwords_dont_match), 
                         Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Por favor, complete todos los campos", 
+                Toast.makeText(this, getString(R.string.fill_all_fields), 
                     Toast.LENGTH_SHORT).show()
             }
         }
@@ -64,7 +65,7 @@ class RegisterActivity : AppCompatActivity() {
                 callback(!snapshot.exists())
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Error al verificar el nombre de usuario", 
+                Toast.makeText(this, getString(R.string.error_checking_username), 
                     Toast.LENGTH_SHORT).show()
                 callback(false)
             }
@@ -93,7 +94,7 @@ class RegisterActivity : AppCompatActivity() {
                         finish()
                     }
                 } else {
-                    Toast.makeText(this, "Error al registrar: ${task.exception?.message}", 
+                    Toast.makeText(this, getString(R.string.registration_error, task.exception?.message), 
                         Toast.LENGTH_SHORT).show()
                 }
             }

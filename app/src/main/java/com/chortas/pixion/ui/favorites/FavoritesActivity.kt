@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.Movie
 import com.chortas.pixion.data.repository.FavoritesRepository
@@ -41,7 +42,7 @@ class FavoritesActivity : AppCompatActivity() {
 
     private fun checkAuthAndLoadFavorites() {
         if (auth.currentUser == null) {
-            Toast.makeText(this, "Debes iniciar sesión para ver tus favoritos", 
+            Toast.makeText(this, getString(R.string.login_required), 
                 Toast.LENGTH_LONG).show()
             finish()
             return
@@ -117,9 +118,7 @@ class FavoritesActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 Log.e("FavoritesActivity", "Error al cargar favoritos", e)
-                Toast.makeText(this@FavoritesActivity, 
-                    "Error al cargar favoritos: ${e.message}", 
-                    Toast.LENGTH_LONG).show()
+                Toast.makeText(this@FavoritesActivity, getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
                 showEmptyState()
             }
         }

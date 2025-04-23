@@ -51,18 +51,15 @@ class MovieDetailActivity : AppCompatActivity() {
                 try {
                     if (isFavorite) {
                         favoritesRepository.removeFromFavorites(movieId)
-                        Toast.makeText(this@MovieDetailActivity, 
-                            "Película eliminada de favoritos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MovieDetailActivity, getString(R.string.movie_removed_from_favorites), Toast.LENGTH_SHORT).show()
                     } else {
                         favoritesRepository.addToFavorites(movieId)
-                        Toast.makeText(this@MovieDetailActivity, 
-                            "Película añadida a favoritos", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MovieDetailActivity, getString(R.string.movie_added_to_favorites), Toast.LENGTH_SHORT).show()
                     }
                     isFavorite = !isFavorite
                     updateFavoriteButton()
                 } catch (e: Exception) {
-                    Toast.makeText(this@MovieDetailActivity, 
-                        "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MovieDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -74,8 +71,7 @@ class MovieDetailActivity : AppCompatActivity() {
                 isFavorite = favoritesRepository.isFavorite(movieId)
                 updateFavoriteButton()
             } catch (e: Exception) {
-                Toast.makeText(this@MovieDetailActivity, 
-                    "Error al verificar favoritos: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MovieDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -110,16 +106,14 @@ class MovieDetailActivity : AppCompatActivity() {
                         Log.d("MovieDetailActivity", "Movie details: $movie")
                         displayMovieDetails(movie)
                     } ?: run {
-                        Toast.makeText(this@MovieDetailActivity, 
-                            "Error al cargar detalles", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MovieDetailActivity, getString(R.string.error_loading_details), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@MovieDetailActivity, 
-                        "Error al cargar detalles: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MovieDetailActivity, getString(R.string.error_loading_details_code, response.code().toString()), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
-                Toast.makeText(this@MovieDetailActivity, "Error de conexión: ${e.message}", 
+                Toast.makeText(this@MovieDetailActivity, getString(R.string.connection_error_with_message, e.message), 
                     Toast.LENGTH_SHORT).show()
                 Log.e("MovieDetailActivity", "Error loading movie details", e)
             }
@@ -128,8 +122,8 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private fun displayMovieDetails(movie: MovieDetail) {
         // Título y descripción
-        binding.tvTitle.text = movie.title ?: "Título no disponible"
-        binding.tvOverview.text = movie.overview ?: "Descripción no disponible"
+        binding.tvTitle.text = movie.title ?: getString(R.string.title_not_available)
+        binding.tvOverview.text = movie.overview ?: getString(R.string.description_not_available)
         
         // Fecha de estreno formateada
         binding.tvReleaseDate.text = movie.getFormattedReleaseDate()

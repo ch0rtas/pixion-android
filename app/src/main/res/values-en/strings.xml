@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pixion</string>
+    
+    <!-- Auth -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_have_account">Already have an account? Login</string>
+    <string name="no_account">Don\'t have an account? Register</string>
+    
+    <!-- Main -->
+    <string name="favorites">Favorites</string>
+    <string name="no_favorites">No favorite movies</string>
+    <string name="cast">Cast</string>
+    
+    <!-- Messages -->
+    <string name="error_loading_movies">Error loading movies</string>
+    <string name="connection_error">Connection error</string>
+    <string name="connection_error_with_message">Connection error: %1$s</string>
+    <string name="login_required">You must login to see your favorites</string>
+    <string name="username_taken">Username is already taken</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+    <string name="fill_all_fields">Please fill all fields</string>
+    <string name="error_checking_username">Error checking username</string>
+    <string name="registration_error">Registration error: %1$s</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    
+    <!-- Form Fields -->
+    <string name="email">Email</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email_or_username">Email or username</string>
+    
+    <!-- Movie Details -->
+    <string name="title_not_available">Title not available</string>
+    <string name="description_not_available">Description not available</string>
+    <string name="movie_added_to_favorites">Movie added to favorites</string>
+    <string name="movie_removed_from_favorites">Movie removed from favorites</string>
+    <string name="error_loading_details">Error loading details</string>
+    <string name="error_loading_details_code">Error loading details: %1$s</string>
+    <string name="error_verifying_favorites">Error verifying favorites: %1$s</string>
+    <string name="error_loading_favorites">Error loading favorites: %1$s</string>
+    <string name="error_generic">Error: %1$s</string>
+</resources> 

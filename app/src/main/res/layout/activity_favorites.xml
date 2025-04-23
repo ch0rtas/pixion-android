@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Favoritos"
+            android:text="@string/favorites"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
@@ -45,7 +45,7 @@
         android:id="@+id/tvEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No hay películas favoritas"
+        android:text="@string/no_favorites"
         android:textColor="@android:color/darker_gray"
         android:textSize="18sp"
         android:visibility="gone"

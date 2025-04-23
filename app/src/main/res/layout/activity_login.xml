@@ -9,7 +9,7 @@
         android:id="@+id/etIdentifier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email o nombre de usuario"
+        android:hint="@string/email_or_username"
         android:inputType="text"
         android:layout_marginBottom="16dp"/>
 
@@ -17,7 +17,7 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Contraseña"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:layout_marginBottom="16dp"/>
 
@@ -25,14 +25,14 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Iniciar sesión"
+        android:text="@string/login"
         android:layout_marginBottom="16dp"/>
 
     <TextView
         android:id="@+id/tvRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="¿No tienes cuenta? Regístrate"
+        android:text="@string/no_account"
         android:gravity="center"
         android:textColor="@android:color/holo_blue_dark"/>
 

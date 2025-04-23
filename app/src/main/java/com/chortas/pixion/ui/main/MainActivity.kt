@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.Movie
 import com.chortas.pixion.data.model.MovieResponse
@@ -75,12 +76,12 @@ class MainActivity : AppCompatActivity() {
                         movieAdapter.notifyDataSetChanged()
                     }
                 } else {
-                    Toast.makeText(this@MainActivity, "Error al cargar películas", 
+                    Toast.makeText(this@MainActivity, getString(R.string.error_loading_movies), 
                         Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
-                Toast.makeText(this@MainActivity, "Error de conexión", 
+                Toast.makeText(this@MainActivity, getString(R.string.connection_error), 
                     Toast.LENGTH_SHORT).show()
             }
         }

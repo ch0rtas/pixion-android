@@ -59,4 +59,20 @@ class FavoritesRepository {
 
         return snapshot.exists()
     }
+
+    suspend fun getFavoriteAddedAt(contentId: Int): Long {
+        val userId = auth.currentUser?.uid ?: throw Exception("Usuario no autenticado")
+        
+        val snapshot = favoritesRef
+            .child(userId)
+            .child(contentId.toString())
+            .get()
+            .await()
+
+        return if (snapshot.exists()) {
+            snapshot.child("addedAt").getValue(Long::class.java) ?: 0L
+        } else {
+            0L
+        }
+    }
 } 

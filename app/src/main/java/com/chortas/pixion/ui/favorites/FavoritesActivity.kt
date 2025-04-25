@@ -199,22 +199,73 @@ class FavoritesActivity : AppCompatActivity() {
     }
 
     private fun updateRecyclerView() {
-        when {
-            movies.isNotEmpty() -> {
-                binding.rvContent.adapter = movieAdapter
-                movieAdapter.notifyDataSetChanged()
-            }
-            series.isNotEmpty() -> {
-                binding.rvContent.adapter = seriesAdapter
-                seriesAdapter.notifyDataSetChanged()
-            }
-            actors.isNotEmpty() -> {
-                binding.rvContent.adapter = actorAdapter
-                actorAdapter.notifyDataSetChanged()
-            }
-            else -> showEmptyState()
+        if (movies.isEmpty() && series.isEmpty() && actors.isEmpty()) {
+            showEmptyState()
+            return
         }
-        binding.progressBar.visibility = View.GONE
+
+        lifecycleScope.launch {
+            try {
+                // Crear una lista combinada de todos los elementos
+                val allItems = mutableListOf<Any>()
+                allItems.addAll(movies)
+                allItems.addAll(series)
+                allItems.addAll(actors)
+
+                // Obtener las fechas de adición para cada elemento
+                val addedAtMap = mutableMapOf<Int, Long>()
+                for (item in allItems) {
+                    val id = when (item) {
+                        is Movie -> item.id
+                        is Series -> item.id
+                        is Actor -> item.id
+                        else -> null
+                    }
+                    if (id != null) {
+                        addedAtMap[id] = favoritesRepository.getFavoriteAddedAt(id)
+                    }
+                }
+
+                // Ordenar por fecha de adición (más recientes primero)
+                allItems.sortByDescending { item ->
+                    val id = when (item) {
+                        is Movie -> item.id
+                        is Series -> item.id
+                        is Actor -> item.id
+                        else -> null
+                    }
+                    addedAtMap[id] ?: 0L
+                }
+
+                // Crear un adaptador personalizado que maneje los diferentes tipos
+                val combinedAdapter = CombinedAdapter(allItems) { item ->
+                    when (item) {
+                        is Movie -> {
+                            val intent = Intent(this@FavoritesActivity, MovieDetailActivity::class.java)
+                            intent.putExtra("movie_id", item.id)
+                            startActivity(intent)
+                        }
+                        is Series -> {
+                            val intent = Intent(this@FavoritesActivity, SeriesDetailActivity::class.java)
+                            intent.putExtra("series_id", item.id)
+                            startActivity(intent)
+                        }
+                        is Actor -> {
+                            val intent = Intent(this@FavoritesActivity, ActorDetailActivity::class.java)
+                            intent.putExtra("actor_id", item.id)
+                            startActivity(intent)
+                        }
+                    }
+                }
+
+                binding.rvContent.adapter = combinedAdapter
+                binding.progressBar.visibility = View.GONE
+            } catch (e: Exception) {
+                Log.e("FavoritesActivity", "Error al actualizar la vista", e)
+                Toast.makeText(this@FavoritesActivity, getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
+                showEmptyState()
+            }
+        }
     }
 
     private fun showEmptyState() {

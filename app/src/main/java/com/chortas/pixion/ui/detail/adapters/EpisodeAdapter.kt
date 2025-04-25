@@ -37,6 +37,7 @@ class EpisodeAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(episode: Episode) {
+            binding.tvEpisodeNumber.text = binding.root.context.getString(R.string.episode_number, episode.episodeNumber)
             binding.tvName.text = episode.name
             binding.tvAirDate.text = episode.getFormattedAirDate()
             binding.tvRating.text = episode.getFormattedRating()

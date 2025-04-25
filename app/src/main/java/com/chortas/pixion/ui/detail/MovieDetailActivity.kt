@@ -1,5 +1,6 @@
 package com.chortas.pixion.ui.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -174,7 +175,11 @@ class MovieDetailActivity : AppCompatActivity() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-            binding.rvCast.adapter = CastAdapter(cast)
+            binding.rvCast.adapter = CastAdapter(cast) { castMember ->
+                val intent = Intent(this, ActorDetailActivity::class.java)
+                intent.putExtra("actor_id", castMember.id)
+                startActivity(intent)
+            }
         } ?: run {
             Log.w("MovieDetailActivity", "El reparto no está disponible")
         }

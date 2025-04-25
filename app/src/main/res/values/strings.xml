@@ -99,4 +99,7 @@
     <string name="episodes">Episodios</string>
     <string name="season">Temporada %1$d</string>
     <string name="episode">Episodio %1$d</string>
+    <string name="episode_number">Episodio %d</string>
+    <string name="episode_image">Imagen del episodio</string>
+    <string name="season_poster">Poster de la temporada</string>
 </resources>

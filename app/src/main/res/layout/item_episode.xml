@@ -1,65 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/ivStill"
-            android:layout_width="120dp"
-            android:layout_height="68dp"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/episode_image" />
+
+        <TextView
+            android:id="@+id/tvEpisodeNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/ivStill"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Episodio 1" />
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivStill"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tvEpisodeNumber"
+            tools:text="Título del episodio" />
 
         <TextView
             android:id="@+id/tvAirDate"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:drawablePadding="4dp"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@+id/ivStill"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            tools:text="01/01/2024" />
 
         <TextView
             android:id="@+id/tvRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:background="@drawable/rating_background"
+            android:drawableStart="@android:drawable/btn_star_big_on"
+            android:drawablePadding="4dp"
             android:padding="4dp"
             android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/tvAirDate"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ivStill"
-            app:layout_constraintTop_toBottomOf="@+id/tvAirDate" />
+            app:layout_constraintTop_toTopOf="@+id/tvAirDate"
+            tools:text="8.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

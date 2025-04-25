@@ -29,10 +29,19 @@ class SeasonDetailActivity : AppCompatActivity() {
         binding = ActivitySeasonDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         seriesId = intent.getIntExtra("series_id", 0)
         seasonNumber = intent.getIntExtra("season_number", 0)
         setupRecyclerView()
         loadSeasonDetails()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun setupRecyclerView() {

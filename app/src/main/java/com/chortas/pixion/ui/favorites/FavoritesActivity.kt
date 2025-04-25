@@ -49,19 +49,8 @@ class FavoritesActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         favoritesRepository = FavoritesRepository()
         setupRecyclerView()
-        setupChipGroup()
+        setupClickListeners()
         checkAuthAndLoadFavorites()
-    }
-
-    private fun setupChipGroup() {
-        binding.chipGroup.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.chipAll -> loadFavorites()
-                R.id.chipMovies -> loadFavorites("movie")
-                R.id.chipSeries -> loadFavorites("series")
-                R.id.chipActors -> loadFavorites("actor")
-            }
-        }
     }
 
     private fun setupRecyclerView() {
@@ -89,6 +78,12 @@ class FavoritesActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupClickListeners() {
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
     private fun checkAuthAndLoadFavorites() {
         if (auth.currentUser == null) {
             Toast.makeText(this, getString(R.string.login_required), 
@@ -99,13 +94,13 @@ class FavoritesActivity : AppCompatActivity() {
         loadFavorites()
     }
 
-    private fun loadFavorites(type: String? = null) {
+    private fun loadFavorites() {
         binding.progressBar.visibility = View.VISIBLE
         binding.tvEmpty.visibility = View.GONE
         
         lifecycleScope.launch {
             try {
-                val favorites = favoritesRepository.getFavorites(type)
+                val favorites = favoritesRepository.getFavorites()
                 if (favorites.isEmpty()) {
                     showEmptyState()
                     return@launch

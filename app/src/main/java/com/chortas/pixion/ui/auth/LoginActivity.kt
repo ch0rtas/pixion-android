@@ -25,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance()
 
         binding.btnLogin.setOnClickListener {
-            val identifier = binding.etIdentifier.text.toString()
+            val identifier = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()
 
             if (identifier.isNotEmpty() && password.isNotEmpty()) {

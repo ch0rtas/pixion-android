@@ -3,74 +3,137 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/background"
+    android:padding="24dp">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/pixion_banner"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/etEmail"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilUsername"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+        android:layout_marginTop="48dp"
+        android:hint="Nombre de usuario"
+        app:startIconDrawable="@drawable/ic_person"
+        app:helperText="El nombre de usuario debe tener mínimo 4 caracteres y no puede contener caracteres especiales como % $ () = ¿? ¡! @ # &amp; *"
+        app:helperTextEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/ivLogo">
 
-    <EditText
-        android:id="@+id/etUsername"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tvUsernameAvailability"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username"
-        android:inputType="text"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/tilUsername" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilEmail"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+        android:hint="Email"
+        app:startIconDrawable="@drawable/ic_email"
+        app:layout_constraintTop_toBottomOf="@id/tvUsernameAvailability">
 
-    <EditText
-        android:id="@+id/etPassword"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPassword"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etUsername" />
+        android:hint="Contraseña"
+        app:startIconDrawable="@drawable/ic_lock"
+        app:passwordToggleEnabled="true"
+        app:helperText="La contraseña debe contener al menos 8 caracteres, una mayúscula, un número y un carácter especial"
+        app:helperTextEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/tilEmail">
 
-    <EditText
-        android:id="@+id/etConfirmPassword"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilConfirmPassword"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="@string/confirm_password"
-        android:inputType="textPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+        android:hint="Confirmar contraseña"
+        app:startIconDrawable="@drawable/ic_lock"
+        app:passwordToggleEnabled="true"
+        app:layout_constraintTop_toBottomOf="@id/tilPassword">
 
-    <Button
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/cbTerms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Acepto los términos y condiciones"
+        android:textColor="@color/text_primary"
+        app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/sign_up"
-        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
+        android:layout_marginTop="16dp"
+        android:padding="12dp"
+        android:text="Registrarse"
+        android:textSize="16sp"
+        android:enabled="false"
+        app:cornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cbTerms" />
 
     <TextView
         android:id="@+id/tvLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/already_have_account"
-        android:textColor="@android:color/holo_blue_dark"
+        android:text="¿Ya tienes cuenta? Inicia sesión"
+        android:textColor="@color/ocean_blue"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
+        app:layout_constraintTop_toBottomOf="@id/btnRegister" />
 
 </androidx.constraintlayout.widget.ConstraintLayout> 

@@ -14,6 +14,7 @@ import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.MovieDetail
 import com.chortas.pixion.data.repository.FavoritesRepository
 import com.chortas.pixion.databinding.ActivityMovieDetailBinding
+import com.chortas.pixion.ui.detail.adapters.CastAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers

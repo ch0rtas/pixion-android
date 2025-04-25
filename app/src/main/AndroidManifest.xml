@@ -29,6 +29,12 @@
         <activity
             android:name=".ui.detail.ActorDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.detail.SeriesDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.detail.SeasonDetailActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

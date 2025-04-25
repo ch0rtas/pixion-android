@@ -94,4 +94,9 @@
     <string name="biography_not_available">Biografía no disponible</string>
     <string name="birthday_not_available">Fecha de nacimiento no disponible</string>
     <string name="place_of_birth_not_available">Lugar de nacimiento no disponible</string>
+    <string name="series">Series</string>
+    <string name="seasons">Temporadas</string>
+    <string name="episodes">Episodios</string>
+    <string name="season">Temporada %1$d</string>
+    <string name="episode">Episodio %1$d</string>
 </resources>

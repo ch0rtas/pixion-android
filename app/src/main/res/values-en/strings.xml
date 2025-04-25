@@ -11,7 +11,7 @@
     
     <!-- Main -->
     <string name="favorites">Favorites</string>
-    <string name="no_favorites">No favorite movies</string>
+    <string name="no_favorites">No favorites yet</string>
     <string name="cast">Cast</string>
     
     <!-- Messages -->

@@ -48,7 +48,10 @@ class SeriesDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 isFavorite = favoritesRepository.isFavorite(seriesId)
-                updateFavoriteButton()
+                binding.btnFavorite.setImageResource(
+                    if (isFavorite) android.R.drawable.star_big_on
+                    else android.R.drawable.star_big_off
+                )
             } catch (e: Exception) {
                 Toast.makeText(this@SeriesDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
             }
@@ -153,24 +156,18 @@ class SeriesDetailActivity : AppCompatActivity() {
                 try {
                     if (isFavorite) {
                         favoritesRepository.removeFromFavorites(seriesId)
-                        Toast.makeText(this@SeriesDetailActivity, getString(R.string.series_removed_from_favorites), Toast.LENGTH_SHORT).show()
+                        binding.btnFavorite.setImageResource(android.R.drawable.star_big_off)
+                        Toast.makeText(this@SeriesDetailActivity, R.string.series_removed_from_favorites, Toast.LENGTH_SHORT).show()
                     } else {
                         favoritesRepository.addToFavorites(seriesId, "series")
-                        Toast.makeText(this@SeriesDetailActivity, getString(R.string.series_added_to_favorites), Toast.LENGTH_SHORT).show()
+                        binding.btnFavorite.setImageResource(android.R.drawable.star_big_on)
+                        Toast.makeText(this@SeriesDetailActivity, R.string.series_added_to_favorites, Toast.LENGTH_SHORT).show()
                     }
                     isFavorite = !isFavorite
-                    updateFavoriteButton()
                 } catch (e: Exception) {
                     Toast.makeText(this@SeriesDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }
-
-    private fun updateFavoriteButton() {
-        binding.btnFavorite.setImageResource(
-            if (isFavorite) android.R.drawable.star_big_on
-            else android.R.drawable.star_big_off
-        )
     }
 } 

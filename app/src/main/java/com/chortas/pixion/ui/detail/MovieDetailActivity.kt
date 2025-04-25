@@ -37,10 +37,6 @@ class MovieDetailActivity : AppCompatActivity() {
         binding = ActivityMovieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         favoritesRepository = FavoritesRepository()
@@ -51,24 +47,20 @@ class MovieDetailActivity : AppCompatActivity() {
         loadMovieDetails()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun setupClickListeners() {
         binding.btnFavorite.setOnClickListener {
             lifecycleScope.launch {
                 try {
                     if (isFavorite) {
                         favoritesRepository.removeFromFavorites(movieId)
-                        Toast.makeText(this@MovieDetailActivity, getString(R.string.movie_removed_from_favorites), Toast.LENGTH_SHORT).show()
+                        binding.btnFavorite.setImageResource(android.R.drawable.star_big_off)
+                        Toast.makeText(this@MovieDetailActivity, R.string.movie_removed_from_favorites, Toast.LENGTH_SHORT).show()
                     } else {
                         favoritesRepository.addToFavorites(movieId, "movie")
-                        Toast.makeText(this@MovieDetailActivity, getString(R.string.movie_added_to_favorites), Toast.LENGTH_SHORT).show()
+                        binding.btnFavorite.setImageResource(android.R.drawable.star_big_on)
+                        Toast.makeText(this@MovieDetailActivity, R.string.movie_added_to_favorites, Toast.LENGTH_SHORT).show()
                     }
                     isFavorite = !isFavorite
-                    updateFavoriteButton()
                 } catch (e: Exception) {
                     Toast.makeText(this@MovieDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
                 }
@@ -80,18 +72,14 @@ class MovieDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 isFavorite = favoritesRepository.isFavorite(movieId)
-                updateFavoriteButton()
+                binding.btnFavorite.setImageResource(
+                    if (isFavorite) android.R.drawable.star_big_on
+                    else android.R.drawable.star_big_off
+                )
             } catch (e: Exception) {
                 Toast.makeText(this@MovieDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun updateFavoriteButton() {
-        binding.btnFavorite.setImageResource(
-            if (isFavorite) android.R.drawable.star_big_on
-            else android.R.drawable.star_big_off
-        )
     }
 
     private fun loadMovieDetails() {

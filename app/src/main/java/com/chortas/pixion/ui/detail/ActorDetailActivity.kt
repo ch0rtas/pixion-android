@@ -36,7 +36,6 @@ class ActorDetailActivity : AppCompatActivity() {
         favoritesRepository = FavoritesRepository()
         setupRecyclerView()
         loadActorDetails()
-        setupClickListeners()
         checkFavoriteStatus()
     }
 
@@ -44,18 +43,10 @@ class ActorDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 isFavorite = favoritesRepository.isFavorite(actorId)
-                updateFavoriteButton()
             } catch (e: Exception) {
                 Toast.makeText(this@ActorDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun updateFavoriteButton() {
-        binding.btnFavorite.setImageResource(
-            if (isFavorite) android.R.drawable.star_big_on
-            else android.R.drawable.star_big_off
-        )
     }
 
     private fun setupRecyclerView() {
@@ -65,7 +56,7 @@ class ActorDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.rvMovies.apply {
+        binding.rvKnownFor.apply {
             layoutManager = LinearLayoutManager(this@ActorDetailActivity)
             adapter = movieAdapter
         }
@@ -123,26 +114,6 @@ class ActorDetailActivity : AppCompatActivity() {
 
         actor.movieCredits.cast.let { movies ->
             movieAdapter.updateMovies(movies)
-        }
-    }
-
-    private fun setupClickListeners() {
-        binding.btnFavorite.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    if (isFavorite) {
-                        favoritesRepository.removeFromFavorites(actorId)
-                        Toast.makeText(this@ActorDetailActivity, getString(R.string.actor_removed_from_favorites), Toast.LENGTH_SHORT).show()
-                    } else {
-                        favoritesRepository.addToFavorites(actorId, "actor")
-                        Toast.makeText(this@ActorDetailActivity, getString(R.string.actor_added_to_favorites), Toast.LENGTH_SHORT).show()
-                    }
-                    isFavorite = !isFavorite
-                    updateFavoriteButton()
-                } catch (e: Exception) {
-                    Toast.makeText(this@ActorDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
-                }
-            }
         }
     }
 } 

@@ -37,6 +37,10 @@ class MovieDetailActivity : AppCompatActivity() {
         binding = ActivityMovieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
         favoritesRepository = FavoritesRepository()
@@ -45,6 +49,11 @@ class MovieDetailActivity : AppCompatActivity() {
         setupClickListeners()
         checkFavoriteStatus()
         loadMovieDetails()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun setupClickListeners() {

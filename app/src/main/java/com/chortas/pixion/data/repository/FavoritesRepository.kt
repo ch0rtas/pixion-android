@@ -11,28 +11,28 @@ class FavoritesRepository {
     private val database = FirebaseDatabase.getInstance()
     private val favoritesRef = database.reference.child("favorites")
 
-    suspend fun addToFavorites(movieId: Int) {
+    suspend fun addToFavorites(contentId: Int, type: String) {
         val userId = auth.currentUser?.uid ?: throw Exception("Usuario no autenticado")
-        val favorite = Favorite(movieId = movieId, userId = userId)
+        val favorite = Favorite(contentId = contentId, userId = userId, type = type)
         
         favoritesRef
             .child(userId)
-            .child(movieId.toString())
+            .child(contentId.toString())
             .setValue(favorite)
             .await()
     }
 
-    suspend fun removeFromFavorites(movieId: Int) {
+    suspend fun removeFromFavorites(contentId: Int) {
         val userId = auth.currentUser?.uid ?: throw Exception("Usuario no autenticado")
         
         favoritesRef
             .child(userId)
-            .child(movieId.toString())
+            .child(contentId.toString())
             .removeValue()
             .await()
     }
 
-    suspend fun getFavorites(): List<Int> {
+    suspend fun getFavorites(type: String? = null): List<Favorite> {
         val userId = auth.currentUser?.uid ?: throw Exception("Usuario no autenticado")
         
         val snapshot = favoritesRef
@@ -41,18 +41,19 @@ class FavoritesRepository {
             .await()
 
         return if (snapshot.exists()) {
-            snapshot.children.mapNotNull { it.getValue<Favorite>()?.movieId }
+            snapshot.children.mapNotNull { it.getValue<Favorite>() }
+                .filter { type == null || it.type == type }
         } else {
             emptyList()
         }
     }
 
-    suspend fun isFavorite(movieId: Int): Boolean {
+    suspend fun isFavorite(contentId: Int): Boolean {
         val userId = auth.currentUser?.uid ?: throw Exception("Usuario no autenticado")
         
         val snapshot = favoritesRef
             .child(userId)
-            .child(movieId.toString())
+            .child(contentId.toString())
             .get()
             .await()
 

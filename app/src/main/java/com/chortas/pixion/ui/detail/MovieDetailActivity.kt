@@ -55,7 +55,7 @@ class MovieDetailActivity : AppCompatActivity() {
                         favoritesRepository.removeFromFavorites(movieId)
                         Toast.makeText(this@MovieDetailActivity, getString(R.string.movie_removed_from_favorites), Toast.LENGTH_SHORT).show()
                     } else {
-                        favoritesRepository.addToFavorites(movieId)
+                        favoritesRepository.addToFavorites(movieId, "movie")
                         Toast.makeText(this@MovieDetailActivity, getString(R.string.movie_added_to_favorites), Toast.LENGTH_SHORT).show()
                     }
                     isFavorite = !isFavorite

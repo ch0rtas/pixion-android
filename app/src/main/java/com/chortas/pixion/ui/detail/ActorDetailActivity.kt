@@ -10,8 +10,10 @@ import com.bumptech.glide.Glide
 import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.ActorDetail
+import com.chortas.pixion.data.repository.FavoritesRepository
 import com.chortas.pixion.databinding.ActivityActorDetailBinding
 import com.chortas.pixion.ui.main.MovieAdapter
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,7 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ActorDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityActorDetailBinding
     private lateinit var movieAdapter: MovieAdapter
+    private lateinit var favoritesRepository: FavoritesRepository
     private var actorId: Int = 0
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +33,29 @@ class ActorDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         actorId = intent.getIntExtra("actor_id", 0)
+        favoritesRepository = FavoritesRepository()
         setupRecyclerView()
         loadActorDetails()
+        setupClickListeners()
+        checkFavoriteStatus()
+    }
+
+    private fun checkFavoriteStatus() {
+        lifecycleScope.launch {
+            try {
+                isFavorite = favoritesRepository.isFavorite(actorId)
+                updateFavoriteButton()
+            } catch (e: Exception) {
+                Toast.makeText(this@ActorDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updateFavoriteButton() {
+        binding.btnFavorite.setImageResource(
+            if (isFavorite) android.R.drawable.star_big_on
+            else android.R.drawable.star_big_off
+        )
     }
 
     private fun setupRecyclerView() {
@@ -98,6 +123,26 @@ class ActorDetailActivity : AppCompatActivity() {
 
         actor.movieCredits.cast.let { movies ->
             movieAdapter.updateMovies(movies)
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.btnFavorite.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    if (isFavorite) {
+                        favoritesRepository.removeFromFavorites(actorId)
+                        Toast.makeText(this@ActorDetailActivity, getString(R.string.actor_removed_from_favorites), Toast.LENGTH_SHORT).show()
+                    } else {
+                        favoritesRepository.addToFavorites(actorId, "actor")
+                        Toast.makeText(this@ActorDetailActivity, getString(R.string.actor_added_to_favorites), Toast.LENGTH_SHORT).show()
+                    }
+                    isFavorite = !isFavorite
+                    updateFavoriteButton()
+                } catch (e: Exception) {
+                    Toast.makeText(this@ActorDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 } 

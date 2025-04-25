@@ -12,9 +12,11 @@ import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.CastMember
 import com.chortas.pixion.data.model.SeriesDetail
+import com.chortas.pixion.data.repository.FavoritesRepository
 import com.chortas.pixion.databinding.ActivitySeriesDetailBinding
 import com.chortas.pixion.ui.detail.adapters.CastAdapter
 import com.chortas.pixion.ui.detail.adapters.SeasonAdapter
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,7 +27,9 @@ class SeriesDetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySeriesDetailBinding
     private lateinit var castAdapter: CastAdapter
     private lateinit var seasonAdapter: SeasonAdapter
+    private lateinit var favoritesRepository: FavoritesRepository
     private var seriesId: Int = 0
+    private var isFavorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +37,29 @@ class SeriesDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         seriesId = intent.getIntExtra("series_id", 0)
+        favoritesRepository = FavoritesRepository()
         setupRecyclerViews()
         loadSeriesDetails()
+        setupClickListeners()
+        checkFavoriteStatus()
+    }
+
+    private fun checkFavoriteStatus() {
+        lifecycleScope.launch {
+            try {
+                isFavorite = favoritesRepository.isFavorite(seriesId)
+                updateFavoriteButton()
+            } catch (e: Exception) {
+                Toast.makeText(this@SeriesDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun updateFavoriteButton() {
+        binding.btnFavorite.setImageResource(
+            if (isFavorite) android.R.drawable.star_big_on
+            else android.R.drawable.star_big_off
+        )
     }
 
     private fun setupRecyclerViews() {
@@ -126,6 +151,26 @@ class SeriesDetailActivity : AppCompatActivity() {
 
         series.seasons.let { seasons ->
             seasonAdapter.updateSeasons(seasons)
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.btnFavorite.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    if (isFavorite) {
+                        favoritesRepository.removeFromFavorites(seriesId)
+                        Toast.makeText(this@SeriesDetailActivity, getString(R.string.series_removed_from_favorites), Toast.LENGTH_SHORT).show()
+                    } else {
+                        favoritesRepository.addToFavorites(seriesId, "series")
+                        Toast.makeText(this@SeriesDetailActivity, getString(R.string.series_added_to_favorites), Toast.LENGTH_SHORT).show()
+                    }
+                    isFavorite = !isFavorite
+                    updateFavoriteButton()
+                } catch (e: Exception) {
+                    Toast.makeText(this@SeriesDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 } 

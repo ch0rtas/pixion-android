@@ -28,11 +28,11 @@
                 android:tint="#FFFFFF" />
 
             <ImageButton
-                android:id="@+id/btnLogout"
+                android:id="@+id/btnMenu"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:src="@android:drawable/ic_menu_more"
                 android:tint="#FFFFFF" />
 
         </LinearLayout>

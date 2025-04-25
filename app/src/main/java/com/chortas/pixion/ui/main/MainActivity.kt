@@ -11,6 +11,7 @@ import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.Movie
 import com.chortas.pixion.data.model.MovieResponse
 import com.chortas.pixion.databinding.ActivityMainBinding
+import com.chortas.pixion.ui.auth.LoginActivity
 import com.chortas.pixion.ui.detail.MovieDetailActivity
 import com.chortas.pixion.ui.favorites.FavoritesActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -92,9 +93,36 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, FavoritesActivity::class.java))
         }
 
-        binding.btnLogout.setOnClickListener {
-            auth.signOut()
-            finish()
+        binding.btnMenu.setOnClickListener {
+            showOptionsMenu()
         }
+    }
+
+    private fun showOptionsMenu() {
+        val options = arrayOf("Reportar bug", "Cerrar sesión")
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> reportBug()
+                1 -> logout()
+            }
+        }
+        builder.show()
+    }
+
+    private fun reportBug() {
+        val emailIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("chortas@protonmail.ch"))
+            putExtra(Intent.EXTRA_SUBJECT, "Reporte de bug - Pixion")
+            putExtra(Intent.EXTRA_TEXT, "Por favor, describe el problema que has encontrado:")
+        }
+        startActivity(Intent.createChooser(emailIntent, "Enviar email"))
+    }
+
+    private fun logout() {
+        auth.signOut()
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 } 

@@ -36,12 +36,21 @@ class SeriesDetailActivity : AppCompatActivity() {
         binding = ActivitySeriesDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         seriesId = intent.getIntExtra("series_id", 0)
         favoritesRepository = FavoritesRepository()
         setupRecyclerViews()
         loadSeriesDetails()
         checkFavoriteStatus()
         setupClickListeners()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun checkFavoriteStatus() {

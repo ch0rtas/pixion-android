@@ -108,4 +108,6 @@
     <string name="episode_image">Imagen del episodio</string>
     <string name="season_poster">Poster de la temporada</string>
     <string name="known_for">Conocido por</string>
+    <string name="watch_trailer">Ver trailer</string>
+    <string name="no_trailer_available">No hay trailer disponible</string>
 </resources>

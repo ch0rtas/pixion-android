@@ -1,6 +1,7 @@
 package com.chortas.pixion.ui.detail
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -12,6 +13,7 @@ import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.CastMember
 import com.chortas.pixion.data.model.SeriesDetail
+import com.chortas.pixion.data.model.Video
 import com.chortas.pixion.data.repository.FavoritesRepository
 import com.chortas.pixion.databinding.ActivitySeriesDetailBinding
 import com.chortas.pixion.ui.detail.adapters.CastAdapter
@@ -30,6 +32,7 @@ class SeriesDetailActivity : AppCompatActivity() {
     private lateinit var favoritesRepository: FavoritesRepository
     private var seriesId: Int = 0
     private var isFavorite: Boolean = false
+    private var trailerKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,7 @@ class SeriesDetailActivity : AppCompatActivity() {
         favoritesRepository = FavoritesRepository()
         setupRecyclerViews()
         loadSeriesDetails()
+        loadSeriesVideos()
         checkFavoriteStatus()
         setupClickListeners()
     }
@@ -152,21 +156,62 @@ class SeriesDetailActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.btnFavorite.setOnClickListener {
-            lifecycleScope.launch {
-                try {
-                    if (isFavorite) {
-                        favoritesRepository.removeFromFavorites(seriesId)
-                        binding.btnFavorite.setImageResource(android.R.drawable.star_big_off)
-                        Toast.makeText(this@SeriesDetailActivity, R.string.series_removed_from_favorites, Toast.LENGTH_SHORT).show()
-                    } else {
-                        favoritesRepository.addToFavorites(seriesId, "series")
-                        binding.btnFavorite.setImageResource(android.R.drawable.star_big_on)
-                        Toast.makeText(this@SeriesDetailActivity, R.string.series_added_to_favorites, Toast.LENGTH_SHORT).show()
-                    }
-                    isFavorite = !isFavorite
-                } catch (e: Exception) {
-                    Toast.makeText(this@SeriesDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
+            toggleFavorite()
+        }
+
+        binding.btnTrailer.setOnClickListener {
+            trailerKey?.let { key ->
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$key"))
+                startActivity(intent)
+            } ?: run {
+                Toast.makeText(this, getString(R.string.no_trailer_available), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun toggleFavorite() {
+        lifecycleScope.launch {
+            try {
+                if (isFavorite) {
+                    favoritesRepository.removeFromFavorites(seriesId)
+                    binding.btnFavorite.setImageResource(android.R.drawable.star_big_off)
+                    Toast.makeText(this@SeriesDetailActivity, R.string.series_removed_from_favorites, Toast.LENGTH_SHORT).show()
+                } else {
+                    favoritesRepository.addToFavorites(seriesId, "series")
+                    binding.btnFavorite.setImageResource(android.R.drawable.star_big_on)
+                    Toast.makeText(this@SeriesDetailActivity, R.string.series_added_to_favorites, Toast.LENGTH_SHORT).show()
                 }
+                isFavorite = !isFavorite
+            } catch (e: Exception) {
+                Toast.makeText(this@SeriesDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun loadSeriesVideos() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(TMDbApi::class.java)
+        
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    api.getSeriesVideos(seriesId)
+                }
+                
+                if (response.isSuccessful) {
+                    response.body()?.results?.let { videos ->
+                        // Buscar el primer trailer oficial
+                        trailerKey = videos.find { video ->
+                            video.type == "Trailer" && video.site == "YouTube" && video.isOfficial
+                        }?.key
+                    }
+                }
+            } catch (e: Exception) {
+                // No mostramos error al usuario ya que el trailer es opcional
             }
         }
     }

@@ -146,6 +146,19 @@ class CombinedAdapter(
         fun bind(actor: Actor) {
             binding.tvName.text = actor.name
             
+            val formattedBirthday = actor.birthday?.let {
+                try {
+                    val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                    val outputFormat = java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault())
+                    val date = inputFormat.parse(it)
+                    outputFormat.format(date)
+                } catch (e: Exception) {
+                    "Fecha no disponible"
+                }
+            } ?: "Fecha no disponible"
+            
+            binding.tvBirthday.text = formattedBirthday
+            
             actor.profilePath?.let { profilePath ->
                 Glide.with(binding.root)
                     .load("https://image.tmdb.org/t/p/w500$profilePath")

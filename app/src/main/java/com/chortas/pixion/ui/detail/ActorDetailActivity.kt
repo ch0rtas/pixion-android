@@ -100,7 +100,19 @@ class ActorDetailActivity : AppCompatActivity() {
     private fun displayActorDetails(actor: ActorDetail) {
         binding.tvName.text = actor.name
         binding.tvBiography.text = actor.biography ?: getString(R.string.biography_not_available)
-        binding.tvBirthday.text = actor.birthday ?: getString(R.string.birthday_not_available)
+        
+        val formattedBirthday = actor.birthday?.let {
+            try {
+                val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                val outputFormat = java.text.SimpleDateFormat("dd-MM-yyyy", java.util.Locale.getDefault())
+                val date = inputFormat.parse(it)
+                outputFormat.format(date)
+            } catch (e: Exception) {
+                getString(R.string.birthday_not_available)
+            }
+        } ?: getString(R.string.birthday_not_available)
+        
+        binding.tvBirthday.text = formattedBirthday
         binding.tvPlaceOfBirth.text = actor.placeOfBirth ?: getString(R.string.place_of_birth_not_available)
 
         actor.profilePath?.let { profilePath ->

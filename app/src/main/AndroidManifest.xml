@@ -26,6 +26,9 @@
         <activity android:name=".ui.main.MainActivity" />
         <activity android:name=".ui.detail.MovieDetailActivity" />
         <activity android:name=".ui.favorites.FavoritesActivity" />
+        <activity
+            android:name=".ui.detail.ActorDetailActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

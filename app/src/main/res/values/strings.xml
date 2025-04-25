@@ -89,4 +89,9 @@
 
     <!-- Terms and Conditions -->
     <string name="terms_and_conditions">1. Aceptación de los términos\n\nAl acceder y utilizar esta aplicación, usted acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con estos términos, por favor no utilice la aplicación.\n\n\n2. Uso de la aplicación\n\nLa aplicación está diseñada para compartir y visualizar contenido multimedia. Usted se compromete a no utilizar la aplicación para:\n- Publicar contenido ilegal o que viole derechos de autor\n- Acosar o dañar a otros usuarios\n- Distribuir spam o contenido malicioso\n\n\n3. Privacidad\n\nNos comprometemos a proteger su privacidad. La información que recopilamos se utiliza únicamente para mejorar la experiencia del usuario y no se comparte con terceros sin su consentimiento.\n\n\n4. Contenido del usuario\n\nAl publicar contenido en la aplicación, usted mantiene sus derechos de autor pero nos otorga una licencia para mostrar y distribuir dicho contenido en la plataforma.\n\n\n5. Modificaciones\n\nNos reservamos el derecho de modificar estos términos en cualquier momento. Los cambios entrarán en vigor inmediatamente después de su publicación en la aplicación.\n\n\n6. API de TMDB\n\nEsta aplicación funciona gracias a la API de TMDB (The Movie Database).\n\n\n7. Desarrollador\n\nDesarrollado por Manuel Martínez (@ch0rtas).\nGitHub: https://github.com/ch0rtas/pixion-android</string>
+
+    <string name="movies">Películas</string>
+    <string name="biography_not_available">Biografía no disponible</string>
+    <string name="birthday_not_available">Fecha de nacimiento no disponible</string>
+    <string name="place_of_birth_not_available">Lugar de nacimiento no disponible</string>
 </resources>

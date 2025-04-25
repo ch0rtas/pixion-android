@@ -1,6 +1,7 @@
 package com.chortas.pixion.ui.detail
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.MovieDetail
+import com.chortas.pixion.data.model.Video
 import com.chortas.pixion.data.repository.FavoritesRepository
 import com.chortas.pixion.databinding.ActivityMovieDetailBinding
 import com.chortas.pixion.ui.detail.adapters.CastAdapter
@@ -31,6 +33,7 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var favoritesRepository: FavoritesRepository
     private var movieId: Int = 0
     private var isFavorite: Boolean = false
+    private var trailerKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,7 @@ class MovieDetailActivity : AppCompatActivity() {
         setupClickListeners()
         checkFavoriteStatus()
         loadMovieDetails()
+        loadMovieVideos()
     }
 
     private fun setupClickListeners() {
@@ -64,6 +68,15 @@ class MovieDetailActivity : AppCompatActivity() {
                 } catch (e: Exception) {
                     Toast.makeText(this@MovieDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        binding.btnTrailer.setOnClickListener {
+            trailerKey?.let { key ->
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=$key"))
+                startActivity(intent)
+            } ?: run {
+                Toast.makeText(this, getString(R.string.no_trailer_available), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -115,6 +128,34 @@ class MovieDetailActivity : AppCompatActivity() {
                 Toast.makeText(this@MovieDetailActivity, getString(R.string.connection_error_with_message, e.message), 
                     Toast.LENGTH_SHORT).show()
                 Log.e("MovieDetailActivity", "Error loading movie details", e)
+            }
+        }
+    }
+
+    private fun loadMovieVideos() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.themoviedb.org/3/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(TMDbApi::class.java)
+        
+        lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    api.getMovieVideos(movieId)
+                }
+                
+                if (response.isSuccessful) {
+                    response.body()?.results?.let { videos ->
+                        // Buscar el primer trailer oficial
+                        trailerKey = videos.find { video ->
+                            video.type == "Trailer" && video.site == "YouTube" && video.isOfficial
+                        }?.key
+                    }
+                }
+            } catch (e: Exception) {
+                // No mostramos error al usuario ya que el trailer es opcional
             }
         }
     }

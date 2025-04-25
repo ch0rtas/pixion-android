@@ -94,6 +94,18 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@+id/ivPoster" />
 
+            <Button
+                android:id="@+id/btnTrailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/watch_trailer"
+                android:drawableStart="@android:drawable/ic_media_play"
+                android:drawablePadding="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvOverview" />
+
             <TextView
                 android:id="@+id/tvCastTitle"
                 android:layout_width="wrap_content"
@@ -105,7 +117,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvOverview" />
+                app:layout_constraintTop_toBottomOf="@+id/btnTrailer" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCast"

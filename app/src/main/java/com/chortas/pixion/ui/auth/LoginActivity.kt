@@ -24,6 +24,13 @@ class LoginActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
 
+        // Verificar si hay una sesión activa
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
+
         binding.btnLogin.setOnClickListener {
             val identifier = binding.etEmail.text.toString()
             val password = binding.etPassword.text.toString()

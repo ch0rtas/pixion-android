@@ -32,20 +32,11 @@ class ActorDetailActivity : AppCompatActivity() {
         binding = ActivityActorDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
         actorId = intent.getIntExtra("actor_id", 0)
         favoritesRepository = FavoritesRepository()
         setupRecyclerView()
         loadActorDetails()
         checkFavoriteStatus()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     private fun checkFavoriteStatus() {

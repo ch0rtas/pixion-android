@@ -81,7 +81,7 @@
     <string name="description_not_available">Descripción no disponible</string>
     <string name="movie_added_to_favorites">Película añadida a favoritos</string>
     <string name="movie_removed_from_favorites">Película eliminada de favoritos</string>
-    <string name="series_added_to_favorites">Serie añadida a favoritos</string>
+    <string name="series_added_to_favorites">Serie agregada a favoritos</string>
     <string name="series_removed_from_favorites">Serie eliminada de favoritos</string>
     <string name="actor_added_to_favorites">Actor añadido a favoritos</string>
     <string name="actor_removed_from_favorites">Actor eliminado de favoritos</string>

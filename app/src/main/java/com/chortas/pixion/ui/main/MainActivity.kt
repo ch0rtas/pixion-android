@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showOptionsMenu() {
-        val options = arrayOf("Reportar bug", "Cerrar sesión")
+        val options = arrayOf(getString(R.string.report_bug), getString(R.string.logout))
         val builder = androidx.appcompat.app.AlertDialog.Builder(this)
         builder.setItems(options) { _, which ->
             when (which) {

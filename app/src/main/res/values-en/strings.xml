@@ -111,4 +111,7 @@
     <string name="accept_terms">I accept the terms and conditions</string>
     <string name="register_button">Register</string>
     <string name="already_have_account_login">Already have an account? Login</string>
+
+    <string name="report_bug">Report bug</string>
+    <string name="logout">Logout</string>
 </resources> 

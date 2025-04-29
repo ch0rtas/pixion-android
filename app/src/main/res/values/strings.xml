@@ -154,4 +154,7 @@
     <string name="biography_label">Biografía</string>
     <string name="actor_profile_description">Foto de perfil del actor</string>
     <string name="known_for_label">Conocido por</string>
+
+    <string name="report_bug">Reportar bug</string>
+    <string name="logout">Cerrar sesión</string>
 </resources>

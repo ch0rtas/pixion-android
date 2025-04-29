@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:hint="Email/Usuario"
+        android:hint="@string/email_or_username_hint"
         app:startIconDrawable="@drawable/ic_email"
         app:layout_constraintTop_toBottomOf="@id/ivLogo">
 
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Contraseña"
+        android:hint="@string/password_hint"
         app:startIconDrawable="@drawable/ic_lock"
         app:passwordToggleEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/tilEmail">
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:padding="12dp"
-        android:text="Iniciar Sesión"
+        android:text="@string/login_button"
         android:textSize="16sp"
         app:cornerRadius="8dp"
         app:layout_constraintTop_toBottomOf="@id/tilPassword" />
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="¿No tienes cuenta? Regístrate aquí"
+        android:text="@string/no_account_register"
         android:textColor="@color/ocean_blue"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +92,7 @@
             android:id="@+id/tvTMDBInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Esta aplicación utiliza la API de The Movie Database (TMDB)"
+            android:text="@string/tmdb_info"
             android:textSize="12sp"
             android:textColor="@color/gray"
             android:layout_marginBottom="8dp"
@@ -104,14 +104,14 @@
             android:layout_height="40dp"
             android:src="@drawable/tmdb_logo"
             android:scaleType="fitCenter"
-            android:contentDescription="TMDB Logo"
+            android:contentDescription="@string/tmdb_logo_content_description"
             android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/tvDeveloperInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="APP desarrollada por Manuel Martínez (GitHub: ch0rtas)"
+            android:text="@string/developer_info"
             android:textSize="12sp"
             android:textColor="@color/gray"
             android:gravity="center" />

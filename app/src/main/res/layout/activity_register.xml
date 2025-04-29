@@ -23,9 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:hint="Nombre de usuario"
+        android:hint="@string/username_hint"
         app:startIconDrawable="@drawable/ic_person"
-        app:helperText="El nombre de usuario debe tener mínimo 4 caracteres y no puede contener caracteres especiales como % $ () = ¿? ¡! @ # &amp; *"
+        app:helperText="@string/username_helper"
         app:helperTextEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/ivLogo">
 
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Email"
+        android:hint="@string/email_hint"
         app:startIconDrawable="@drawable/ic_email"
         app:layout_constraintTop_toBottomOf="@id/tvUsernameAvailability">
 
@@ -69,10 +69,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Contraseña"
+        android:hint="@string/password_hint"
         app:startIconDrawable="@drawable/ic_lock"
         app:passwordToggleEnabled="true"
-        app:helperText="La contraseña debe contener al menos 8 caracteres, una mayúscula, un número y un carácter especial"
+        app:helperText="@string/password_helper"
         app:helperTextEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/tilEmail">
 
@@ -90,7 +90,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Confirmar contraseña"
+        android:hint="@string/confirm_password_hint"
         app:startIconDrawable="@drawable/ic_lock"
         app:passwordToggleEnabled="true"
         app:layout_constraintTop_toBottomOf="@id/tilPassword">
@@ -108,7 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Acepto los términos y condiciones"
+        android:text="@string/accept_terms"
         android:textColor="@color/text_primary"
         app:layout_constraintTop_toBottomOf="@id/tilConfirmPassword" />
 
@@ -118,7 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:padding="12dp"
-        android:text="Registrarse"
+        android:text="@string/register_button"
         android:textSize="16sp"
         android:enabled="false"
         app:cornerRadius="8dp"
@@ -129,7 +129,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="¿Ya tienes cuenta? Inicia sesión"
+        android:text="@string/already_have_account_login"
         android:textColor="@color/ocean_blue"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pixion</string>
+    <string name="action_settings">Settings</string>
     
     <!-- Auth -->
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="sign_up">Sign Up</string>
     <string name="already_have_account">Already have an account? Login</string>
-    <string name="no_account">Don\'t have an account? Register</string>
+    <string name="no_account">Don\'t have an account? Sign Up</string>
     
     <!-- Main -->
     <string name="favorites">Favorites</string>
-    <string name="no_favorites">No favorites yet</string>
+    <string name="no_favorites">No favorite movies</string>
     <string name="cast">Cast</string>
     
     <!-- Messages -->
@@ -25,7 +26,7 @@
     <string name="error_checking_username">Error checking username</string>
     <string name="registration_error">Registration error: %1$s</string>
     <string name="invalid_credentials">Invalid credentials</string>
-    
+
     <!-- Form Fields -->
     <string name="email">Email</string>
     <string name="username">Username</string>
@@ -38,9 +39,76 @@
     <string name="description_not_available">Description not available</string>
     <string name="movie_added_to_favorites">Movie added to favorites</string>
     <string name="movie_removed_from_favorites">Movie removed from favorites</string>
+    <string name="series_added_to_favorites">Series added to favorites</string>
+    <string name="series_removed_from_favorites">Series removed from favorites</string>
+    <string name="actor_added_to_favorites">Actor added to favorites</string>
+    <string name="actor_removed_from_favorites">Actor removed from favorites</string>
+    <string name="all">All</string>
     <string name="error_loading_details">Error loading details</string>
     <string name="error_loading_details_code">Error loading details: %1$s</string>
     <string name="error_verifying_favorites">Error verifying favorites: %1$s</string>
     <string name="error_loading_favorites">Error loading favorites: %1$s</string>
     <string name="error_generic">Error: %1$s</string>
+    <string name="release_date">Release date: %1$s</string>
+    <string name="runtime">Runtime: %1$d min</string>
+    <string name="rating">%1$.1f</string>
+    <string name="overview">Overview</string>
+    <string name="cast_title">Cast</string>
+    <string name="poster_description">Movie poster</string>
+    <string name="backdrop_description">Movie backdrop</string>
+    <string name="favorite_button_description">Favorite button</string>
+
+    <!-- Series Details -->
+    <string name="first_air_date">First air date: %1$s</string>
+    <string name="seasons_count">%1$d seasons</string>
+    <string name="episodes_count">%1$d episodes</string>
+    <string name="season_title">Season %1$d</string>
+    <string name="episode_title">Episode %1$d: %2$s</string>
+    <string name="series_poster_description">Series poster</string>
+    <string name="series_backdrop_description">Series backdrop</string>
+
+    <!-- Actor Details -->
+    <string name="birthday_label">Birthday: %1$s</string>
+    <string name="place_of_birth_label">Place of birth: %1$s</string>
+    <string name="biography_label">Biography</string>
+    <string name="actor_profile_description">Actor profile picture</string>
+    <string name="known_for_label">Known for</string>
+
+    <!-- Terms and Conditions -->
+    <string name="terms_and_conditions">1. Acceptance of Terms\n\nBy accessing and using this application, you agree to be bound by these terms and conditions of use. If you do not agree with these terms, please do not use the application.\n\n\n2. Use of the Application\n\nThe application is designed for sharing and viewing multimedia content. You agree not to use the application to:\n- Post illegal content or content that violates copyright\n- Harass or harm other users\n- Distribute spam or malicious content\n\n\n3. Privacy\n\nWe are committed to protecting your privacy. The information we collect is used solely to improve the user experience and is not shared with third parties without your consent.\n\n\n4. User Content\n\nBy posting content on the application, you retain your copyright but grant us a license to display and distribute such content on the platform.\n\n\n5. Modifications\n\nWe reserve the right to modify these terms at any time. Changes will take effect immediately after being posted in the application.\n\n\n6. TMDB API\n\nThis application works thanks to the TMDB (The Movie Database) API.\n\n\n7. Developer\n\nDeveloped by Manuel Martínez (@ch0rtas).\nGitHub: https://github.com/ch0rtas/pixion-android</string>
+
+    <string name="movies">Movies</string>
+    <string name="biography_not_available">Biography not available</string>
+    <string name="birthday_not_available">Birthday not available</string>
+    <string name="place_of_birth_not_available">Place of birth not available</string>
+    <string name="series">Series</string>
+    <string name="seasons">Seasons</string>
+    <string name="episodes">Episodes</string>
+    <string name="season">Season %1$d</string>
+    <string name="episode">Episode %1$d</string>
+    <string name="episode_number">Episode %d</string>
+    <string name="episode_image">Episode image</string>
+    <string name="season_poster">Season poster</string>
+    <string name="known_for">Known for</string>
+    <string name="watch_trailer">Watch trailer</string>
+    <string name="no_trailer_available">No trailer available</string>
+
+    <!-- Login -->
+    <string name="email_or_username_hint">Email/Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="no_account_register">Don\'t have an account? Register here</string>
+    <string name="tmdb_info">This app uses The Movie Database (TMDB) API</string>
+    <string name="developer_info">APP developed by Manuel Martínez (GitHub: ch0rtas)</string>
+    <string name="tmdb_logo_content_description">TMDB Logo</string>
+
+    <!-- Register -->
+    <string name="username_hint">Username</string>
+    <string name="username_helper">Username must be at least 4 characters long and cannot contain special characters like % $ () = ? ! @ # &amp; *</string>
+    <string name="email_hint">Email</string>
+    <string name="confirm_password_hint">Confirm Password</string>
+    <string name="password_helper">Password must contain at least 8 characters, one uppercase letter, one number and one special character</string>
+    <string name="accept_terms">I accept the terms and conditions</string>
+    <string name="register_button">Register</string>
+    <string name="already_have_account_login">Already have an account? Login</string>
 </resources> 

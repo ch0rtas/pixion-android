@@ -13,7 +13,7 @@ import com.chortas.pixion.data.model.MovieResponse
 import com.chortas.pixion.data.model.Series
 import com.chortas.pixion.data.model.SeriesResponse
 import com.chortas.pixion.databinding.ActivityMainBinding
-import com.chortas.pixion.ui.auth.LoginActivity
+import com.chortas.pixion.ui.auth.AuthActivity
 import com.chortas.pixion.ui.detail.MovieDetailActivity
 import com.chortas.pixion.ui.detail.SeriesDetailActivity
 import com.chortas.pixion.ui.favorites.FavoritesActivity
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         setupRecyclerViews()
         setupTabLayout()
-        loadMovies()
+        checkAuthAndLoadContent()
         setupClickListeners()
     }
 
@@ -84,6 +84,15 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+    }
+
+    private fun checkAuthAndLoadContent() {
+        if (auth.currentUser == null) {
+            startActivity(Intent(this, AuthActivity::class.java))
+            finish()
+            return
+        }
+        loadMovies()
     }
 
     private fun loadMovies() {
@@ -190,7 +199,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun logout() {
         auth.signOut()
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, AuthActivity::class.java))
         finish()
     }
 } 

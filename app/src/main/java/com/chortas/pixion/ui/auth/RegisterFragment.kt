@@ -1,34 +1,44 @@
 package com.chortas.pixion.ui.auth
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.chortas.pixion.R
 import com.chortas.pixion.data.model.User
-import com.chortas.pixion.databinding.ActivityRegisterBinding
 import com.chortas.pixion.databinding.DialogTermsBinding
-import com.chortas.pixion.ui.main.MainActivity
+import com.chortas.pixion.databinding.FragmentRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.util.regex.Pattern
 
-class RegisterActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityRegisterBinding
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
     private lateinit var database: FirebaseDatabase
     private var termsAccepted = false
     private var isUsernameAvailable = false
     private var isEmailAvailable = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityRegisterBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance()
@@ -40,8 +50,7 @@ class RegisterActivity : AppCompatActivity() {
         setupRegisterButton()
 
         binding.tvLogin.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            findNavController().navigate(R.id.loginFragment)
         }
     }
 
@@ -62,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
                     binding.tilUsername.helperText = "El nombre de usuario debe tener mínimo 4 caracteres y no puede contener caracteres especiales como % $ () = ¿? ¡! @ # & *"
                     binding.tilUsername.isHelperTextEnabled = true
                     binding.tvUsernameAvailability.text = "Usuario no disponible"
-                    binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(this@RegisterActivity, R.color.red))
+                    binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                     isUsernameAvailable = false
                 } else {
                     binding.tilUsername.isHelperTextEnabled = false
@@ -154,7 +163,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun showTermsDialog() {
         val dialogView = DialogTermsBinding.inflate(layoutInflater)
-        val dialog = AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView.root)
             .setCancelable(false)
             .create()
@@ -203,7 +212,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun registerUser(email: String, password: String, username: String) {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     user?.let {
@@ -213,18 +222,14 @@ class RegisterActivity : AppCompatActivity() {
                             username = username
                         )
                         
-                        // Guardar usuario en Realtime Database
                         database.reference.child("users").child(it.uid).setValue(newUser)
-                        
-                        // Guardar referencia de nombre de usuario
                         database.reference.child("usernames").child(username).setValue(it.uid)
                         
-                        // Navegar a la pantalla principal
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
+                        findNavController().navigate(R.id.mainActivity)
                     }
                 } else {
-                    Toast.makeText(this, getString(R.string.registration_error, task.exception?.message), 
+                    Toast.makeText(requireContext(), 
+                        getString(R.string.registration_error, task.exception?.message), 
                         Toast.LENGTH_SHORT).show()
                 }
             }
@@ -237,18 +242,18 @@ class RegisterActivity : AppCompatActivity() {
             .addOnSuccessListener { snapshot ->
                 if (!snapshot.exists()) {
                     binding.tvUsernameAvailability.text = "Nombre de usuario disponible"
-                    binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(this@RegisterActivity, R.color.green))
+                    binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
                     isUsernameAvailable = true
                 } else {
                     binding.tvUsernameAvailability.text = "Nombre de usuario ya en uso"
-                    binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(this@RegisterActivity, R.color.red))
+                    binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                     isUsernameAvailable = false
                 }
                 validateForm()
             }
             .addOnFailureListener {
                 binding.tvUsernameAvailability.text = "Error al verificar disponibilidad"
-                binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(this@RegisterActivity, R.color.red))
+                binding.tvUsernameAvailability.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                 isUsernameAvailable = false
                 validateForm()
             }
@@ -276,9 +281,8 @@ class RegisterActivity : AppCompatActivity() {
             }
     }
 
-    fun openGitHub(view: android.view.View) {
-        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/ch0rtas/pixion-android"))
-        startActivity(intent)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 } 
-

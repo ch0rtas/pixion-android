@@ -50,6 +50,7 @@
     <string name="register">Registro</string>
     <string name="sign_up">Registrarse</string>
     <string name="already_have_account">¿Ya tienes cuenta? Inicia sesión</string>
+    <string name="register_here">¿No tienes cuenta? Regístrate aquí</string>
     <string name="no_account">¿No tienes cuenta? Regístrate</string>
     
     <!-- Main -->

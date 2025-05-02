@@ -282,7 +282,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun navigateToMain() {
-        findNavController().navigate(R.id.action_registerFragment_to_mainContainerActivity)
+        findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
     }
 
     override fun onDestroyView() {

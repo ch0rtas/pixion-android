@@ -36,7 +36,7 @@ class LoginFragment : Fragment() {
 
         // Verificar si hay una sesión activa
         if (auth.currentUser != null) {
-            findNavController().navigate(R.id.action_loginFragment_to_mainContainerActivity)
+            navigateToMain()
             return
         }
 
@@ -61,7 +61,7 @@ class LoginFragment : Fragment() {
         auth.signInWithEmailAndPassword(identifier, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    findNavController().navigate(R.id.action_loginFragment_to_mainContainerActivity)
+                    navigateToMain()
                 } else {
                     checkUsernameAndLogin(identifier, password)
                 }
@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
                                     auth.signInWithEmailAndPassword(userEmail, password)
                                         .addOnCompleteListener { task ->
                                             if (task.isSuccessful) {
-                                                findNavController().navigate(R.id.action_loginFragment_to_mainContainerActivity)
+                                                navigateToMain()
                                             } else {
                                                 Toast.makeText(requireContext(), 
                                                     "Error al iniciar sesión: ${task.exception?.message}", 
@@ -105,6 +105,10 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), getString(R.string.error_checking_username), 
                     Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun navigateToMain() {
+        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
     }
 
     override fun onDestroyView() {

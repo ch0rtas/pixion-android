@@ -22,8 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.auth.RegisterActivity" />
-        <activity android:name=".ui.main.MainActivity" />
+        <activity android:name=".ui.main.MainContainerActivity" />
         <activity android:name=".ui.detail.MovieDetailActivity" />
         <activity android:name=".ui.favorites.FavoritesActivity" />
         <activity

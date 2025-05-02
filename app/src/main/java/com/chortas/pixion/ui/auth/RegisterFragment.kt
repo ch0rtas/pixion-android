@@ -225,7 +225,7 @@ class RegisterFragment : Fragment() {
                         database.reference.child("users").child(it.uid).setValue(newUser)
                         database.reference.child("usernames").child(username).setValue(it.uid)
                         
-                        findNavController().navigate(R.id.mainActivity)
+                        navigateToMain()
                     }
                 } else {
                     Toast.makeText(requireContext(), 
@@ -279,6 +279,10 @@ class RegisterFragment : Fragment() {
                 }
                 validateForm()
             }
+    }
+
+    private fun navigateToMain() {
+        findNavController().navigate(R.id.action_registerFragment_to_mainContainerActivity)
     }
 
     override fun onDestroyView() {

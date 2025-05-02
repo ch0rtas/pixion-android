@@ -14,8 +14,8 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            android:id="@+id/action_loginFragment_to_mainContainerActivity"
+            app:destination="@id/mainContainerActivity" />
     </fragment>
 
     <fragment
@@ -27,12 +27,12 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_registerFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            android:id="@+id/action_registerFragment_to_mainContainerActivity"
+            app:destination="@id/mainContainerActivity" />
     </fragment>
 
     <activity
-        android:id="@+id/mainActivity"
-        android:name="com.chortas.pixion.ui.main.MainActivity"
-        android:label="MainActivity" />
+        android:id="@+id/mainContainerActivity"
+        android:name="com.chortas.pixion.ui.main.MainContainerActivity"
+        android:label="MainContainerActivity" />
 </navigation>

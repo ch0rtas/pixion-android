@@ -18,7 +18,7 @@ import com.chortas.pixion.databinding.FragmentMainBinding
 import com.chortas.pixion.ui.auth.AuthActivity
 import com.chortas.pixion.ui.detail.MovieDetailActivity
 import com.chortas.pixion.ui.detail.SeriesDetailActivity
-import com.chortas.pixion.ui.favorites.FavoritesActivity
+import com.chortas.pixion.ui.favorites.FavoritesFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.navigation.fragment.findNavController
 
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
@@ -103,8 +104,11 @@ class MainFragment : Fragment() {
 
     private fun setupToolbarButtons() {
         binding.btnFavorites.setOnClickListener {
-            val intent = Intent(requireContext(), FavoritesActivity::class.java)
-            startActivity(intent)
+            if (auth.currentUser == null) {
+                startActivity(Intent(requireContext(), AuthActivity::class.java))
+            } else {
+                findNavController().navigate(R.id.action_mainFragment_to_favoritesFragment)
+            }
         }
 
         binding.btnMenu.setOnClickListener {

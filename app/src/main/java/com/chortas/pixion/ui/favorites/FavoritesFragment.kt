@@ -3,26 +3,28 @@ package com.chortas.pixion.ui.favorites
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
+import com.chortas.pixion.data.model.Actor
 import com.chortas.pixion.data.model.Favorite
 import com.chortas.pixion.data.model.Movie
 import com.chortas.pixion.data.model.Series
-import com.chortas.pixion.data.model.Actor
 import com.chortas.pixion.data.repository.FavoritesRepository
-import com.chortas.pixion.databinding.ActivityFavoritesBinding
+import com.chortas.pixion.databinding.FragmentFavoritesBinding
+import com.chortas.pixion.ui.detail.ActorDetailActivity
 import com.chortas.pixion.ui.detail.MovieDetailActivity
 import com.chortas.pixion.ui.detail.SeriesDetailActivity
-import com.chortas.pixion.ui.detail.ActorDetailActivity
+import com.chortas.pixion.ui.main.ActorAdapter
 import com.chortas.pixion.ui.main.MovieAdapter
 import com.chortas.pixion.ui.main.SeriesAdapter
-import com.chortas.pixion.ui.main.ActorAdapter
-import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,8 +32,9 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class FavoritesActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFavoritesBinding
+class FavoritesFragment : Fragment() {
+    private var _binding: FragmentFavoritesBinding? = null
+    private val binding get() = _binding!!
     private lateinit var favoritesRepository: FavoritesRepository
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var seriesAdapter: SeriesAdapter
@@ -41,11 +44,18 @@ class FavoritesActivity : AppCompatActivity() {
     private val series = mutableListOf<Series>()
     private val actors = mutableListOf<Actor>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityFavoritesBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        
         auth = FirebaseAuth.getInstance()
         favoritesRepository = FavoritesRepository()
         setupRecyclerView()
@@ -55,40 +65,39 @@ class FavoritesActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(movies) { movie ->
-            val intent = Intent(this, MovieDetailActivity::class.java)
+            val intent = Intent(requireContext(), MovieDetailActivity::class.java)
             intent.putExtra("movie_id", movie.id)
             startActivity(intent)
         }
 
         seriesAdapter = SeriesAdapter(series) { series ->
-            val intent = Intent(this, SeriesDetailActivity::class.java)
+            val intent = Intent(requireContext(), SeriesDetailActivity::class.java)
             intent.putExtra("series_id", series.id)
             startActivity(intent)
         }
 
         actorAdapter = ActorAdapter(actors) { actor ->
-            val intent = Intent(this, ActorDetailActivity::class.java)
+            val intent = Intent(requireContext(), ActorDetailActivity::class.java)
             intent.putExtra("actor_id", actor.id)
             startActivity(intent)
         }
 
         binding.rvContent.apply {
-            layoutManager = GridLayoutManager(this@FavoritesActivity, 2)
+            layoutManager = GridLayoutManager(requireContext(), 2)
             adapter = movieAdapter
         }
     }
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
-            onBackPressed()
+            findNavController().navigateUp()
         }
     }
 
     private fun checkAuthAndLoadFavorites() {
         if (auth.currentUser == null) {
-            Toast.makeText(this, getString(R.string.login_required), 
+            Toast.makeText(requireContext(), getString(R.string.login_required), 
                 Toast.LENGTH_LONG).show()
-            finish()
             return
         }
         loadFavorites()
@@ -98,7 +107,7 @@ class FavoritesActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
         binding.tvEmpty.visibility = View.GONE
         
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val favorites = favoritesRepository.getFavorites()
                 if (favorites.isEmpty()) {
@@ -180,14 +189,14 @@ class FavoritesActivity : AppCompatActivity() {
                             }
                         }
                     } catch (e: Exception) {
-                        Log.e("FavoritesActivity", "Error al cargar contenido ${favorite.contentId}", e)
+                        Log.e("FavoritesFragment", "Error al cargar contenido ${favorite.contentId}", e)
                     }
                 }
 
                 updateRecyclerView()
             } catch (e: Exception) {
-                Log.e("FavoritesActivity", "Error al cargar favoritos", e)
-                Toast.makeText(this@FavoritesActivity, getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
+                Log.e("FavoritesFragment", "Error al cargar favoritos", e)
+                Toast.makeText(requireContext(), getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
                 showEmptyState()
             }
         }
@@ -199,7 +208,7 @@ class FavoritesActivity : AppCompatActivity() {
             return
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             try {
                 // Crear una lista combinada de todos los elementos
                 val allItems = mutableListOf<Any>()
@@ -236,17 +245,17 @@ class FavoritesActivity : AppCompatActivity() {
                 val combinedAdapter = CombinedAdapter(allItems) { item ->
                     when (item) {
                         is Movie -> {
-                            val intent = Intent(this@FavoritesActivity, MovieDetailActivity::class.java)
+                            val intent = Intent(requireContext(), MovieDetailActivity::class.java)
                             intent.putExtra("movie_id", item.id)
                             startActivity(intent)
                         }
                         is Series -> {
-                            val intent = Intent(this@FavoritesActivity, SeriesDetailActivity::class.java)
+                            val intent = Intent(requireContext(), SeriesDetailActivity::class.java)
                             intent.putExtra("series_id", item.id)
                             startActivity(intent)
                         }
                         is Actor -> {
-                            val intent = Intent(this@FavoritesActivity, ActorDetailActivity::class.java)
+                            val intent = Intent(requireContext(), ActorDetailActivity::class.java)
                             intent.putExtra("actor_id", item.id)
                             startActivity(intent)
                         }
@@ -256,8 +265,8 @@ class FavoritesActivity : AppCompatActivity() {
                 binding.rvContent.adapter = combinedAdapter
                 binding.progressBar.visibility = View.GONE
             } catch (e: Exception) {
-                Log.e("FavoritesActivity", "Error al actualizar la vista", e)
-                Toast.makeText(this@FavoritesActivity, getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
+                Log.e("FavoritesFragment", "Error al actualizar la vista", e)
+                Toast.makeText(requireContext(), getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
                 showEmptyState()
             }
         }
@@ -266,5 +275,10 @@ class FavoritesActivity : AppCompatActivity() {
     private fun showEmptyState() {
         binding.progressBar.visibility = View.GONE
         binding.tvEmpty.visibility = View.VISIBLE
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 } 

@@ -77,15 +77,11 @@ class CombinedAdapter(
         notifyDataSetChanged()
     }
 
-    inner class MovieViewHolder(
-        private val binding: ItemMovieBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class MovieViewHolder(private val binding: ItemMovieBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onItemClick(items[position])
-                }
+                onItemClick(items[adapterPosition])
             }
         }
 
@@ -104,15 +100,11 @@ class CombinedAdapter(
         }
     }
 
-    inner class SeriesViewHolder(
-        private val binding: ItemSeriesBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class SeriesViewHolder(private val binding: ItemSeriesBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onItemClick(items[position])
-                }
+                onItemClick(items[adapterPosition])
             }
         }
 
@@ -131,15 +123,11 @@ class CombinedAdapter(
         }
     }
 
-    inner class ActorViewHolder(
-        private val binding: ItemActorBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class ActorViewHolder(private val binding: ItemActorBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onItemClick(items[position])
-                }
+                onItemClick(items[adapterPosition])
             }
         }
 

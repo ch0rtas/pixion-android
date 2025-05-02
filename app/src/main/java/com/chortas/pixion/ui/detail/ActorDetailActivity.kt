@@ -39,6 +39,7 @@ class ActorDetailActivity : AppCompatActivity() {
         actorId = intent.getIntExtra("actor_id", 0)
         favoritesRepository = FavoritesRepository()
         setupRecyclerView()
+        setupClickListeners()
         loadActorDetails()
         checkFavoriteStatus()
     }
@@ -52,6 +53,10 @@ class ActorDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 isFavorite = favoritesRepository.isFavorite(actorId)
+                binding.btnFavorite.setImageResource(
+                    if (isFavorite) android.R.drawable.star_big_on
+                    else android.R.drawable.star_big_off
+                )
             } catch (e: Exception) {
                 Toast.makeText(this@ActorDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
             }
@@ -68,6 +73,31 @@ class ActorDetailActivity : AppCompatActivity() {
         binding.rvKnownFor.apply {
             layoutManager = LinearLayoutManager(this@ActorDetailActivity)
             adapter = movieAdapter
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.btnFavorite.setOnClickListener {
+            toggleFavorite()
+        }
+    }
+
+    private fun toggleFavorite() {
+        lifecycleScope.launch {
+            try {
+                if (isFavorite) {
+                    favoritesRepository.removeFromFavorites(actorId)
+                    binding.btnFavorite.setImageResource(android.R.drawable.star_big_off)
+                    Toast.makeText(this@ActorDetailActivity, R.string.actor_removed_from_favorites, Toast.LENGTH_SHORT).show()
+                } else {
+                    favoritesRepository.addToFavorites(actorId, "actor")
+                    binding.btnFavorite.setImageResource(android.R.drawable.star_big_on)
+                    Toast.makeText(this@ActorDetailActivity, R.string.actor_added_to_favorites, Toast.LENGTH_SHORT).show()
+                }
+                isFavorite = !isFavorite
+            } catch (e: Exception) {
+                Toast.makeText(this@ActorDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

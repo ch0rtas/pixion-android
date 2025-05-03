@@ -15,14 +15,13 @@
         android:theme="@style/Theme.Pixion"
         tools:targetApi="31">
         <activity
-            android:name=".ui.auth.AuthActivity"
+            android:name=".ui.main.MainContainerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.main.MainContainerActivity" />
         <activity android:name=".ui.detail.MovieDetailActivity" />
         <activity android:name=".ui.favorites.FavoritesActivity" />
         <activity

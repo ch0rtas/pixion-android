@@ -132,10 +132,7 @@ class MainFragment : Fragment() {
                     }
                     1 -> {
                         auth.signOut()
-                        val intent = Intent(requireContext(), AuthActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        requireActivity().finish()
+                        findNavController().navigate(R.id.loginFragment)
                     }
                 }
             }
@@ -144,8 +141,7 @@ class MainFragment : Fragment() {
 
     private fun checkAuthAndLoadContent() {
         if (auth.currentUser == null) {
-            startActivity(Intent(requireContext(), AuthActivity::class.java))
-            requireActivity().finish()
+            findNavController().navigate(R.id.loginFragment)
         } else {
             loadMovies()
             loadSeries()

@@ -85,11 +85,12 @@ class SeriesDetailFragment : Fragment() {
 
     private fun setupRecyclerViews() {
         castAdapter = CastAdapter(emptyList()) { castMember ->
-            val fragment = ActorDetailFragment.newInstance(castMember.id)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(
+                R.id.action_seriesDetailFragment_to_actorDetailFragment,
+                Bundle().apply {
+                    putInt("actor_id", castMember.id)
+                }
+            )
         }
         seasonAdapter = SeasonAdapter(emptyList()) { season ->
             val bundle = Bundle().apply {

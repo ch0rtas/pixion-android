@@ -71,13 +71,20 @@
         android:id="@+id/movieDetailFragment"
         android:name="com.chortas.pixion.ui.detail.MovieDetailFragment"
         android:label="MovieDetailFragment"
-        tools:layout="@layout/fragment_movie_detail" />
+        tools:layout="@layout/fragment_movie_detail">
+        <action
+            android:id="@+id/action_movieDetailFragment_to_actorDetailFragment"
+            app:destination="@id/actorDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/seriesDetailFragment"
         android:name="com.chortas.pixion.ui.detail.SeriesDetailFragment"
         android:label="SeriesDetailFragment"
         tools:layout="@layout/fragment_series_detail">
+        <action
+            android:id="@+id/action_seriesDetailFragment_to_actorDetailFragment"
+            app:destination="@id/actorDetailFragment" />
         <action
             android:id="@+id/action_seriesDetailFragment_to_seasonDetailFragment"
             app:destination="@id/seasonDetailFragment" />

@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import androidx.navigation.fragment.findNavController
 
 class ActorDetailFragment : Fragment() {
     private var _binding: FragmentActorDetailBinding? = null
@@ -74,11 +75,12 @@ class ActorDetailFragment : Fragment() {
 
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(emptyList()) { movie ->
-            val fragment = MovieDetailFragment.newInstance(movie.id)
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit()
+            findNavController().navigate(
+                R.id.action_actorDetailFragment_to_movieDetailFragment,
+                Bundle().apply {
+                    putInt("movie_id", movie.id)
+                }
+            )
         }
 
         binding.rvKnownFor.apply {

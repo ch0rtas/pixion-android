@@ -15,7 +15,6 @@ import com.chortas.pixion.data.model.MovieResponse
 import com.chortas.pixion.data.model.Series
 import com.chortas.pixion.data.model.SeriesResponse
 import com.chortas.pixion.databinding.FragmentMainBinding
-import com.chortas.pixion.ui.auth.AuthActivity
 import com.chortas.pixion.ui.detail.MovieDetailActivity
 import com.chortas.pixion.ui.detail.SeriesDetailActivity
 import com.chortas.pixion.ui.favorites.FavoritesFragment
@@ -105,7 +104,7 @@ class MainFragment : Fragment() {
     private fun setupToolbarButtons() {
         binding.btnFavorites.setOnClickListener {
             if (auth.currentUser == null) {
-                startActivity(Intent(requireContext(), AuthActivity::class.java))
+                findNavController().navigate(R.id.loginFragment)
             } else {
                 findNavController().navigate(R.id.action_mainFragment_to_favoritesFragment)
             }

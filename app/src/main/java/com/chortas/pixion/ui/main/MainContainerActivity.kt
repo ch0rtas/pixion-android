@@ -35,21 +35,24 @@ class MainContainerActivity : AppCompatActivity() {
             .findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
 
-        if (!navController.popBackStack()) {
-            if (auth.currentUser != null) {
-                if (doubleBackToExitPressedOnce) {
-                    finish()
-                    return
-                }
-
-                doubleBackToExitPressedOnce = true
-                Toast.makeText(this, getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show()
-
-                handler.postDelayed({
-                    doubleBackToExitPressedOnce = false
-                }, 2000) // 2 segundos para presionar de nuevo
+        // Si estamos en el MainFragment y hay un usuario autenticado
+        if (navController.currentDestination?.id == R.id.mainFragment && auth.currentUser != null) {
+            if (doubleBackToExitPressedOnce) {
+                finish()
                 return
             }
+
+            doubleBackToExitPressedOnce = true
+            Toast.makeText(this, getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show()
+
+            handler.postDelayed({
+                doubleBackToExitPressedOnce = false
+            }, 2000) // 2 segundos para presionar de nuevo
+            return
+        }
+
+        // Para otros casos, usar la navegación normal
+        if (!navController.popBackStack()) {
             super.onBackPressed()
         }
     }

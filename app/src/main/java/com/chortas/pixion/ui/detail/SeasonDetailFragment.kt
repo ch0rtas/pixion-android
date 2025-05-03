@@ -1,16 +1,18 @@
 package com.chortas.pixion.ui.detail
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.SeasonDetail
-import com.chortas.pixion.databinding.ActivitySeasonDetailBinding
+import com.chortas.pixion.databinding.FragmentSeasonDetailBinding
 import com.chortas.pixion.ui.detail.adapters.EpisodeAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,37 +20,44 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class SeasonDetailActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySeasonDetailBinding
+class SeasonDetailFragment : Fragment() {
+    private var _binding: FragmentSeasonDetailBinding? = null
+    private val binding get() = _binding!!
     private lateinit var episodeAdapter: EpisodeAdapter
     private var seriesId: Int = 0
     private var seasonNumber: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySeasonDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        seriesId = arguments?.getInt("series_id") ?: 0
+        seasonNumber = arguments?.getInt("season_number") ?: 0
+    }
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSeasonDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        seriesId = intent.getIntExtra("series_id", 0)
-        seasonNumber = intent.getIntExtra("season_number", 0)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         loadSeasonDetails()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupRecyclerView() {
         episodeAdapter = EpisodeAdapter(emptyList())
 
         binding.rvEpisodes.apply {
-            layoutManager = LinearLayoutManager(this@SeasonDetailActivity)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = episodeAdapter
         }
     }
@@ -75,14 +84,14 @@ class SeasonDetailActivity : AppCompatActivity() {
                     response.body()?.let { season ->
                         displaySeasonDetails(season)
                     } ?: run {
-                        Toast.makeText(this@SeasonDetailActivity, getString(R.string.error_loading_details), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.error_loading_details), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@SeasonDetailActivity, getString(R.string.error_loading_details_code, response.code().toString()), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.error_loading_details_code, response.code().toString()), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
-                Toast.makeText(this@SeasonDetailActivity, getString(R.string.connection_error_with_message, e.message), 
+                Toast.makeText(requireContext(), getString(R.string.connection_error_with_message, e.message), 
                     Toast.LENGTH_SHORT).show()
             }
         }

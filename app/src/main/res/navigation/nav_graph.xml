@@ -74,6 +74,16 @@
         android:id="@+id/seriesDetailFragment"
         android:name="com.chortas.pixion.ui.detail.SeriesDetailFragment"
         android:label="SeriesDetailFragment"
-        tools:layout="@layout/fragment_series_detail" />
+        tools:layout="@layout/fragment_series_detail">
+        <action
+            android:id="@+id/action_seriesDetailFragment_to_seasonDetailFragment"
+            app:destination="@id/seasonDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/seasonDetailFragment"
+        android:name="com.chortas.pixion.ui.detail.SeasonDetailFragment"
+        android:label="SeasonDetailFragment"
+        tools:layout="@layout/fragment_season_detail" />
 
 </navigation>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.chortas.pixion.R
@@ -89,10 +90,11 @@ class SeriesDetailFragment : Fragment() {
             startActivity(intent)
         }
         seasonAdapter = SeasonAdapter(emptyList()) { season ->
-            val intent = Intent(requireContext(), SeasonDetailActivity::class.java)
-            intent.putExtra("series_id", seriesId)
-            intent.putExtra("season_number", season.seasonNumber)
-            startActivity(intent)
+            val bundle = Bundle().apply {
+                putInt("series_id", seriesId)
+                putInt("season_number", season.seasonNumber)
+            }
+            findNavController().navigate(R.id.action_seriesDetailFragment_to_seasonDetailFragment, bundle)
         }
 
         binding.rvCast.apply {

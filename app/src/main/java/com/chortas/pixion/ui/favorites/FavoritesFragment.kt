@@ -22,9 +22,6 @@ import com.chortas.pixion.databinding.FragmentFavoritesBinding
 import com.chortas.pixion.ui.detail.ActorDetailActivity
 import com.chortas.pixion.ui.detail.MovieDetailActivity
 import com.chortas.pixion.ui.detail.SeriesDetailActivity
-import com.chortas.pixion.ui.main.ActorAdapter
-import com.chortas.pixion.ui.main.MovieAdapter
-import com.chortas.pixion.ui.main.SeriesAdapter
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,13 +33,9 @@ class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavoritesBinding? = null
     private val binding get() = _binding!!
     private lateinit var favoritesRepository: FavoritesRepository
-    private lateinit var movieAdapter: MovieAdapter
-    private lateinit var seriesAdapter: SeriesAdapter
-    private lateinit var actorAdapter: ActorAdapter
+    private lateinit var favoritesAdapter: FavoritesCardAdapter
     private lateinit var auth: FirebaseAuth
-    private val movies = mutableListOf<Movie>()
-    private val series = mutableListOf<Series>()
-    private val actors = mutableListOf<Actor>()
+    private val allItems = mutableListOf<Any>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,27 +57,54 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        movieAdapter = MovieAdapter(movies) { movie ->
-            val intent = Intent(requireContext(), MovieDetailActivity::class.java)
-            intent.putExtra("movie_id", movie.id)
-            startActivity(intent)
-        }
-
-        seriesAdapter = SeriesAdapter(series) { series ->
-            val intent = Intent(requireContext(), SeriesDetailActivity::class.java)
-            intent.putExtra("series_id", series.id)
-            startActivity(intent)
-        }
-
-        actorAdapter = ActorAdapter(actors) { actor ->
-            val intent = Intent(requireContext(), ActorDetailActivity::class.java)
-            intent.putExtra("actor_id", actor.id)
-            startActivity(intent)
-        }
+        favoritesAdapter = FavoritesCardAdapter(
+            items = allItems,
+            onItemClick = { item ->
+                when (item) {
+                    is Movie -> {
+                        val intent = Intent(requireContext(), MovieDetailActivity::class.java)
+                        intent.putExtra("movie_id", item.id)
+                        startActivity(intent)
+                    }
+                    is Series -> {
+                        val intent = Intent(requireContext(), SeriesDetailActivity::class.java)
+                        intent.putExtra("series_id", item.id)
+                        startActivity(intent)
+                    }
+                    is Actor -> {
+                        val intent = Intent(requireContext(), ActorDetailActivity::class.java)
+                        intent.putExtra("actor_id", item.id)
+                        startActivity(intent)
+                    }
+                }
+            },
+            onRemoveClick = { item ->
+                val contentId = when (item) {
+                    is Movie -> item.id
+                    is Series -> item.id
+                    is Actor -> item.id
+                    else -> return@FavoritesCardAdapter
+                }
+                
+                viewLifecycleOwner.lifecycleScope.launch {
+                    try {
+                        favoritesRepository.removeFromFavorites(contentId)
+                        allItems.remove(item)
+                        favoritesAdapter.notifyDataSetChanged()
+                        if (allItems.isEmpty()) {
+                            showEmptyState()
+                        }
+                        Toast.makeText(requireContext(), R.string.removed_from_favorites, Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), getString(R.string.error_removing_favorite, e.message), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        )
 
         binding.rvContent.apply {
             layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = movieAdapter
+            adapter = favoritesAdapter
         }
     }
 
@@ -122,9 +142,7 @@ class FavoritesFragment : Fragment() {
 
                 val api = retrofit.create(TMDbApi::class.java)
                 
-                movies.clear()
-                series.clear()
-                actors.clear()
+                allItems.clear()
 
                 for (favorite in favorites) {
                     try {
@@ -136,7 +154,7 @@ class FavoritesFragment : Fragment() {
                                 
                                 if (response.isSuccessful) {
                                     response.body()?.let { movieDetail ->
-                                        movies.add(Movie(
+                                        allItems.add(Movie(
                                             id = movieDetail.id,
                                             title = movieDetail.title,
                                             overview = movieDetail.overview,
@@ -156,7 +174,7 @@ class FavoritesFragment : Fragment() {
                                 
                                 if (response.isSuccessful) {
                                     response.body()?.let { seriesDetail ->
-                                        series.add(Series(
+                                        allItems.add(Series(
                                             id = seriesDetail.id,
                                             name = seriesDetail.name,
                                             overview = seriesDetail.overview,
@@ -176,7 +194,7 @@ class FavoritesFragment : Fragment() {
                                 
                                 if (response.isSuccessful) {
                                     response.body()?.let { actorDetail ->
-                                        actors.add(Actor(
+                                        allItems.add(Actor(
                                             id = actorDetail.id,
                                             name = actorDetail.name,
                                             profilePath = actorDetail.profilePath,
@@ -193,29 +211,6 @@ class FavoritesFragment : Fragment() {
                     }
                 }
 
-                updateRecyclerView()
-            } catch (e: Exception) {
-                Log.e("FavoritesFragment", "Error al cargar favoritos", e)
-                Toast.makeText(requireContext(), getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
-                showEmptyState()
-            }
-        }
-    }
-
-    private fun updateRecyclerView() {
-        if (movies.isEmpty() && series.isEmpty() && actors.isEmpty()) {
-            showEmptyState()
-            return
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                // Crear una lista combinada de todos los elementos
-                val allItems = mutableListOf<Any>()
-                allItems.addAll(movies)
-                allItems.addAll(series)
-                allItems.addAll(actors)
-
                 // Obtener las fechas de adición para cada elemento
                 val addedAtMap = mutableMapOf<Int, Long>()
                 for (item in allItems) {
@@ -226,7 +221,14 @@ class FavoritesFragment : Fragment() {
                         else -> null
                     }
                     if (id != null) {
-                        addedAtMap[id] = favoritesRepository.getFavoriteAddedAt(id)
+                        try {
+                            val addedAt = withContext(Dispatchers.IO) {
+                                favoritesRepository.getFavoriteAddedAt(id)
+                            }
+                            addedAtMap[id] = addedAt
+                        } catch (e: Exception) {
+                            addedAtMap[id] = 0L
+                        }
                     }
                 }
 
@@ -240,32 +242,15 @@ class FavoritesFragment : Fragment() {
                     }
                     addedAtMap[id] ?: 0L
                 }
-
-                // Crear un adaptador personalizado que maneje los diferentes tipos
-                val combinedAdapter = CombinedAdapter(allItems) { item ->
-                    when (item) {
-                        is Movie -> {
-                            val intent = Intent(requireContext(), MovieDetailActivity::class.java)
-                            intent.putExtra("movie_id", item.id)
-                            startActivity(intent)
-                        }
-                        is Series -> {
-                            val intent = Intent(requireContext(), SeriesDetailActivity::class.java)
-                            intent.putExtra("series_id", item.id)
-                            startActivity(intent)
-                        }
-                        is Actor -> {
-                            val intent = Intent(requireContext(), ActorDetailActivity::class.java)
-                            intent.putExtra("actor_id", item.id)
-                            startActivity(intent)
-                        }
-                    }
-                }
-
-                binding.rvContent.adapter = combinedAdapter
+                
+                favoritesAdapter.notifyDataSetChanged()
                 binding.progressBar.visibility = View.GONE
+                
+                if (allItems.isEmpty()) {
+                    showEmptyState()
+                }
             } catch (e: Exception) {
-                Log.e("FavoritesFragment", "Error al actualizar la vista", e)
+                Log.e("FavoritesFragment", "Error al cargar favoritos", e)
                 Toast.makeText(requireContext(), getString(R.string.error_loading_favorites, e.message), Toast.LENGTH_LONG).show()
                 showEmptyState()
             }

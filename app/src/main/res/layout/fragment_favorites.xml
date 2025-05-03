@@ -34,7 +34,8 @@
                 android:layout_centerInParent="true"
                 android:text="@string/favorites"
                 android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </RelativeLayout>
     </androidx.appcompat.widget.Toolbar>
 

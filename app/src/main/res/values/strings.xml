@@ -114,4 +114,7 @@
 
     <string name="report_bug">Reportar bug</string>
     <string name="logout">Cerrar sesión</string>
+
+    <string name="removed_from_favorites">Eliminado de favoritos</string>
+    <string name="error_removing_favorite">Error al eliminar de favoritos: %1$s</string>
 </resources>

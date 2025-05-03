@@ -37,6 +37,15 @@ class MainFragment : Fragment() {
     private val movies = mutableListOf<Movie>()
     private val series = mutableListOf<Series>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private var selectedTabPosition = 0
+    private var isFirstLoad = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState != null) {
+            selectedTabPosition = savedInstanceState.getInt("selected_tab_position", 0)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +64,36 @@ class MainFragment : Fragment() {
         setupTabLayout()
         setupToolbarButtons()
         checkAuthAndLoadContent()
+
+        if (isFirstLoad) {
+            isFirstLoad = false
+            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(selectedTabPosition))
+            updateTabVisibility(selectedTabPosition)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(selectedTabPosition))
+        updateTabVisibility(selectedTabPosition)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("selected_tab_position", selectedTabPosition)
+    }
+
+    private fun updateTabVisibility(position: Int) {
+        when (position) {
+            0 -> {
+                binding.recyclerViewMovies.visibility = View.VISIBLE
+                binding.recyclerViewSeries.visibility = View.GONE
+            }
+            1 -> {
+                binding.recyclerViewMovies.visibility = View.GONE
+                binding.recyclerViewSeries.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun setupRecyclerViews() {
@@ -90,16 +129,8 @@ class MainFragment : Fragment() {
     private fun setupTabLayout() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    0 -> {
-                        binding.recyclerViewMovies.visibility = View.VISIBLE
-                        binding.recyclerViewSeries.visibility = View.GONE
-                    }
-                    1 -> {
-                        binding.recyclerViewMovies.visibility = View.GONE
-                        binding.recyclerViewSeries.visibility = View.VISIBLE
-                    }
-                }
+                selectedTabPosition = tab?.position ?: 0
+                updateTabVisibility(selectedTabPosition)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}

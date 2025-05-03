@@ -15,7 +15,7 @@ import com.chortas.pixion.data.model.MovieResponse
 import com.chortas.pixion.data.model.Series
 import com.chortas.pixion.data.model.SeriesResponse
 import com.chortas.pixion.databinding.FragmentMainBinding
-import com.chortas.pixion.ui.detail.MovieDetailActivity
+import com.chortas.pixion.ui.detail.MovieDetailFragment
 import com.chortas.pixion.ui.detail.SeriesDetailActivity
 import com.chortas.pixion.ui.favorites.FavoritesFragment
 import com.google.android.material.tabs.TabLayout
@@ -59,9 +59,12 @@ class MainFragment : Fragment() {
 
     private fun setupRecyclerViews() {
         movieAdapter = MovieAdapter(movies) { movie ->
-            val intent = Intent(requireContext(), MovieDetailActivity::class.java)
-            intent.putExtra("movie_id", movie.id)
-            startActivity(intent)
+            findNavController().navigate(
+                R.id.action_mainFragment_to_movieDetailFragment,
+                Bundle().apply {
+                    putInt("movie_id", movie.id)
+                }
+            )
         }
 
         seriesAdapter = SeriesAdapter(series) { series ->

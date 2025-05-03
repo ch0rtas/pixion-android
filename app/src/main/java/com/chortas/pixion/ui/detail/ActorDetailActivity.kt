@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -65,9 +66,11 @@ class ActorDetailActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(emptyList()) { movie ->
-            val intent = android.content.Intent(this, MovieDetailActivity::class.java)
-            intent.putExtra("movie_id", movie.id)
-            startActivity(intent)
+            val fragment = MovieDetailFragment.newInstance(movie.id)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
         binding.rvKnownFor.apply {

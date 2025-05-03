@@ -19,7 +19,7 @@ import com.chortas.pixion.data.model.Movie
 import com.chortas.pixion.data.model.Series
 import com.chortas.pixion.data.repository.FavoritesRepository
 import com.chortas.pixion.databinding.FragmentFavoritesBinding
-import com.chortas.pixion.ui.detail.ActorDetailActivity
+import com.chortas.pixion.ui.detail.ActorDetailFragment
 import com.chortas.pixion.ui.detail.MovieDetailFragment
 import com.chortas.pixion.ui.detail.SeriesDetailFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -78,9 +78,13 @@ class FavoritesFragment : Fragment() {
                         )
                     }
                     is Actor -> {
-                        val intent = Intent(requireContext(), ActorDetailActivity::class.java)
-                        intent.putExtra("actor_id", item.id)
-                        startActivity(intent)
+                        val fragment = ActorDetailFragment.newInstance(item.id)
+                        findNavController().navigate(
+                            R.id.action_favoritesFragment_to_actorDetailFragment,
+                            Bundle().apply {
+                                putInt("actor_id", item.id)
+                            }
+                        )
                     }
                 }
             },

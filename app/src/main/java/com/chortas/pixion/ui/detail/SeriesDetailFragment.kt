@@ -85,9 +85,11 @@ class SeriesDetailFragment : Fragment() {
 
     private fun setupRecyclerViews() {
         castAdapter = CastAdapter(emptyList()) { castMember ->
-            val intent = Intent(requireContext(), ActorDetailActivity::class.java)
-            intent.putExtra("actor_id", castMember.id)
-            startActivity(intent)
+            val fragment = ActorDetailFragment.newInstance(castMember.id)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
         seasonAdapter = SeasonAdapter(emptyList()) { season ->
             val bundle = Bundle().apply {

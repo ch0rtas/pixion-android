@@ -227,9 +227,11 @@ class MovieDetailFragment : Fragment() {
                 false
             )
             binding.rvCast.adapter = CastAdapter(cast) { castMember ->
-                val intent = Intent(requireContext(), ActorDetailActivity::class.java)
-                intent.putExtra("actor_id", castMember.id)
-                startActivity(intent)
+                val fragment = ActorDetailFragment.newInstance(castMember.id)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
             }
         } ?: run {
             Log.w("MovieDetailFragment", "El reparto no está disponible")

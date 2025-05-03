@@ -1,10 +1,11 @@
 package com.chortas.pixion.ui.detail
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -12,7 +13,7 @@ import com.chortas.pixion.R
 import com.chortas.pixion.data.api.TMDbApi
 import com.chortas.pixion.data.model.ActorDetail
 import com.chortas.pixion.data.repository.FavoritesRepository
-import com.chortas.pixion.databinding.ActivityActorDetailBinding
+import com.chortas.pixion.databinding.FragmentActorDetailBinding
 import com.chortas.pixion.ui.main.MovieAdapter
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +22,9 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ActorDetailActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityActorDetailBinding
+class ActorDetailFragment : Fragment() {
+    private var _binding: FragmentActorDetailBinding? = null
+    private val binding get() = _binding!!
     private lateinit var movieAdapter: MovieAdapter
     private lateinit var favoritesRepository: FavoritesRepository
     private var actorId: Int = 0
@@ -30,24 +32,30 @@ class ActorDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityActorDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        actorId = intent.getIntExtra("actor_id", 0)
+        actorId = arguments?.getInt("actor_id") ?: 0
         favoritesRepository = FavoritesRepository()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentActorDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setupClickListeners()
         loadActorDetails()
         checkFavoriteStatus()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun checkFavoriteStatus() {
@@ -59,7 +67,7 @@ class ActorDetailActivity : AppCompatActivity() {
                     else android.R.drawable.star_big_off
                 )
             } catch (e: Exception) {
-                Toast.makeText(this@ActorDetailActivity, getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_verifying_favorites, e.message), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -67,14 +75,14 @@ class ActorDetailActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         movieAdapter = MovieAdapter(emptyList()) { movie ->
             val fragment = MovieDetailFragment.newInstance(movie.id)
-            supportFragmentManager.beginTransaction()
+            parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
         }
 
         binding.rvKnownFor.apply {
-            layoutManager = LinearLayoutManager(this@ActorDetailActivity)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = movieAdapter
         }
     }
@@ -91,15 +99,15 @@ class ActorDetailActivity : AppCompatActivity() {
                 if (isFavorite) {
                     favoritesRepository.removeFromFavorites(actorId)
                     binding.btnFavorite.setImageResource(android.R.drawable.star_big_off)
-                    Toast.makeText(this@ActorDetailActivity, R.string.actor_removed_from_favorites, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.actor_removed_from_favorites, Toast.LENGTH_SHORT).show()
                 } else {
                     favoritesRepository.addToFavorites(actorId, "actor")
                     binding.btnFavorite.setImageResource(android.R.drawable.star_big_on)
-                    Toast.makeText(this@ActorDetailActivity, R.string.actor_added_to_favorites, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), R.string.actor_added_to_favorites, Toast.LENGTH_SHORT).show()
                 }
                 isFavorite = !isFavorite
             } catch (e: Exception) {
-                Toast.makeText(this@ActorDetailActivity, getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_generic, e.message), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -126,14 +134,14 @@ class ActorDetailActivity : AppCompatActivity() {
                     response.body()?.let { actor ->
                         displayActorDetails(actor)
                     } ?: run {
-                        Toast.makeText(this@ActorDetailActivity, getString(R.string.error_loading_details), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), getString(R.string.error_loading_details), Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@ActorDetailActivity, getString(R.string.error_loading_details_code, response.code().toString()), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.error_loading_details_code, response.code().toString()), Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 binding.progressBar.visibility = View.GONE
-                Toast.makeText(this@ActorDetailActivity, getString(R.string.connection_error_with_message, e.message), 
+                Toast.makeText(requireContext(), getString(R.string.connection_error_with_message, e.message), 
                     Toast.LENGTH_SHORT).show()
             }
         }
@@ -168,6 +176,16 @@ class ActorDetailActivity : AppCompatActivity() {
 
         actor.movieCredits.cast.let { movies ->
             movieAdapter.updateMovies(movies)
+        }
+    }
+
+    companion object {
+        fun newInstance(actorId: Int): ActorDetailFragment {
+            val fragment = ActorDetailFragment()
+            val args = Bundle()
+            args.putInt("actor_id", actorId)
+            fragment.arguments = args
+            return fragment
         }
     }
 } 

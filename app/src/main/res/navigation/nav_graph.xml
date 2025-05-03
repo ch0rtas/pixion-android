@@ -62,6 +62,9 @@
         <action
             android:id="@+id/action_favoritesFragment_to_seriesDetailFragment"
             app:destination="@id/seriesDetailFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_actorDetailFragment"
+            app:destination="@id/actorDetailFragment" />
     </fragment>
 
     <fragment
@@ -85,5 +88,14 @@
         android:name="com.chortas.pixion.ui.detail.SeasonDetailFragment"
         android:label="SeasonDetailFragment"
         tools:layout="@layout/fragment_season_detail" />
+
+    <fragment
+        android:id="@+id/actorDetailFragment"
+        android:name="com.chortas.pixion.ui.detail.ActorDetailFragment"
+        android:label="ActorDetailFragment">
+        <argument
+            android:name="actor_id"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

@@ -16,7 +16,7 @@ import com.chortas.pixion.data.model.Series
 import com.chortas.pixion.data.model.SeriesResponse
 import com.chortas.pixion.databinding.FragmentMainBinding
 import com.chortas.pixion.ui.detail.MovieDetailFragment
-import com.chortas.pixion.ui.detail.SeriesDetailActivity
+import com.chortas.pixion.ui.detail.SeriesDetailFragment
 import com.chortas.pixion.ui.favorites.FavoritesFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -68,9 +68,12 @@ class MainFragment : Fragment() {
         }
 
         seriesAdapter = SeriesAdapter(series) { series ->
-            val intent = Intent(requireContext(), SeriesDetailActivity::class.java)
-            intent.putExtra("series_id", series.id)
-            startActivity(intent)
+            findNavController().navigate(
+                R.id.action_mainFragment_to_seriesDetailFragment,
+                Bundle().apply {
+                    putInt("series_id", series.id)
+                }
+            )
         }
 
         binding.recyclerViewMovies.apply {

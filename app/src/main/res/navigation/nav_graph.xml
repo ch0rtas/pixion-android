@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_mainFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_seriesDetailFragment"
+            app:destination="@id/seriesDetailFragment" />
     </fragment>
 
     <fragment
@@ -56,6 +59,9 @@
         <action
             android:id="@+id/action_favoritesFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_seriesDetailFragment"
+            app:destination="@id/seriesDetailFragment" />
     </fragment>
 
     <fragment
@@ -63,5 +69,11 @@
         android:name="com.chortas.pixion.ui.detail.MovieDetailFragment"
         android:label="MovieDetailFragment"
         tools:layout="@layout/fragment_movie_detail" />
+
+    <fragment
+        android:id="@+id/seriesDetailFragment"
+        android:name="com.chortas.pixion.ui.detail.SeriesDetailFragment"
+        android:label="SeriesDetailFragment"
+        tools:layout="@layout/fragment_series_detail" />
 
 </navigation>

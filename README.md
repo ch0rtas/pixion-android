@@ -157,3 +157,4 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 Manuel Martínez - [GitHub](https://github.com/ch0rtas)
 
 Link del proyecto: [https://github.com/ch0rtas/pixion-android](https://github.com/ch0rtas/pixion-android)
+

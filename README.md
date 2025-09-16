@@ -1,4 +1,4 @@
-# 📱 Pixion Android
+# 📱 Pixion Androids
 
 ## Aplicación de Información de Películas y Series
 
